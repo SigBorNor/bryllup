@@ -4,7 +4,7 @@ window.CONFIG = {
   kode: "123",
 
   // Lenken til Google Apps Script-nettappen (se README, del 1).
-  scriptUrl: "https://script.google.com/macros/s/AKfycby-8b-2z_ut4cInVj1Z4Lu-QFSRLLTf3OfgvaeiC7zPYz7eBKSOvjyNwFqC_f6SJjqh-g/exec",
+  scriptUrl: "https://script.google.com/macros/s/AKfycbzhPJh1xBJ9RZ8dfvHX6VQKQCvTbWEnnr5KZCAyX71PgftP0ryc8w3ngoga-nSXkIS-UQ/exec",
 
   // Maks antall personer per påmelding (deg + andre).
   maksPersoner: 9,
