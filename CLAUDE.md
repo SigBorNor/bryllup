@@ -18,6 +18,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 - **Farger og fonter:** `:root` øverst i `style.css`.
 - **Innstillinger:** `config.js` (kode, `scriptUrl`, `maksPersoner`, `paameldingApen`).
 - **Bilder:** `media/`. Videoen ligger i `media/hav.mp4` (under ca. 8 MB, spilles uten lyd). Den er bearbeidet: sakket ned til 60 % med beregnede mellombilder, og slutten toner over i starten så sløyfen ikke har noe hopp. `media/hav.jpg` er første bilde i videoen og vises mens den lastes. Byttes videoen, må begge lages på nytt.
+- **Bildebank i `media/`** (ikke brukt på siden ennå, navngitt etter motiv): `paris-louvre`, `paris-seinen-eiffel`, `forlovelse-ring-kinn`, `forlovelse-ring-latter`, `forlovelse-klem-genser`, `ski-topptur-selfie`, `ski-briller-selfie`, `vinter-luer-selfie`, `vinter-akebrett` (stor original, 4872×5568, bør komprimeres før bruk), `jul-lystre`, `kveld-ved-sjoen`, `sommer-terrasse-borg`, `hytte-middag-levende-lys`, `story-nye-nokler` (skjermbilde av Instagram-story), `surf-paa-vei-ut`, `solnedgang-strand-selfie`, `fest-dress-og-kjole` (alle `.jpg`).
 - **Håndskriftfont:** `fonts/HAD-Script.woff2`. Reservefont er Caveat.
 
 ## Beslutninger som er tatt (ikke endre uten å avklare med Sigve og Sofie)
