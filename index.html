@@ -161,6 +161,31 @@ const C = {
       tekst: ["Vi har samlet tips til ting å se og gjøre i og rundt Humlebæk."], visTips: true }
   ],
 
+  // Bildekarusellen nederst. Rekkefølgen her er rekkefølgen på siden.
+  // fil ligger i media/. b og h er bildets bredde og høyde i piksler.
+  bilder: [
+    { fil: "oss-svalbard.jpg", b: 1400, h: 1311, alt: "Sofie og Sigve på dekk med snødekte fjell i bakgrunnen" },
+    { fil: "forlovelse-ring-latter.jpg", b: 768, h: 1024, alt: "Sofie ler og viser fram forlovelsesringen" },
+    { fil: "surf.jpg", b: 1320, h: 755, alt: "Sofie og Sigve på surfebrett i havet" },
+    { fil: "paris-louvre.jpg", b: 768, h: 1024, alt: "Sofie og Sigve foran Louvre i Paris" },
+    { fil: "ski-topptur-selfie.jpg", b: 769, h: 1024, alt: "Sofie og Sigve på skitur i fjellet" },
+    { fil: "forlovelse-ring-kinn.jpg", b: 786, h: 1000, alt: "Sofie og Sigve kinn mot kinn, med forlovelsesringen" },
+    { fil: "hytte-middag-levende-lys.jpg", b: 1086, h: 724, alt: "Middag med levende lys på en tømmerhytte" },
+    { fil: "kveld-ved-sjoen.jpg", b: 768, h: 1024, alt: "Sofie og Sigve ved sjøen i skumringen" },
+    { fil: "vinter-akebrett.jpg", b: 1400, h: 1600, alt: "Sofie og Sigve på slede i snøen" },
+    { fil: "sommer-terrasse-borg.jpg", b: 1082, h: 726, alt: "Sofie og Sigve på en terrasse med en borg i bakgrunnen" },
+    { fil: "forlovelse-klem-genser.jpg", b: 768, h: 1024, alt: "Sofie og Sigve klemmer hverandre" },
+    { fil: "jul-lystre.jpg", b: 724, h: 1086, alt: "Sofie og Sigve under et tre pyntet med lys" },
+    { fil: "surf-paa-vei-ut.jpg", b: 768, h: 1024, alt: "Sofie og Sigve bærer surfebrett over hodet på stranden" },
+    { fil: "paris-seinen-eiffel.jpg", b: 768, h: 1024, alt: "Sofie og Sigve ved Seinen med Eiffeltårnet bak" },
+    { fil: "ski-briller-selfie.jpg", b: 768, h: 1024, alt: "Sofie og Sigve med hjelm og skibriller" },
+    { fil: "fest-dress-og-kjole.jpg", b: 724, h: 1086, alt: "Sofie og Sigve i kjole og dress på fest" },
+    { fil: "solnedgang-strand-selfie.jpg", b: 1024, h: 768, alt: "Sofie og Sigve på stranden i solnedgang" },
+    { fil: "vinter-luer-selfie.jpg", b: 768, h: 1024, alt: "Sofie og Sigve med luer under blå himmel" },
+    { fil: "story-nye-nokler.jpg", b: 640, h: 1136, alt: "Sofie og Sigve viser fram nye nøkler" },
+    { fil: "krogerup.jpg", b: 1440, h: 720, alt: "Krogerup Højskole med blomstereng foran" }
+  ],
+
   // Hotellene i bolken «Hoteller og rabattordning».
   // avtale: hva hotellet tilbyr gjestene våre. booking: hvordan gjestene bestiller.
   // kart: det som skal søkes opp i Google Maps (navn og adresse).
@@ -242,7 +267,11 @@ const C = {
   <main class="side">
     <!-- Om oss, med svarknappen under historien -->
     <section class="seksjon om" id="om-oss" data-toc="Om oss" aria-label="Om oss">
-      <figure class="om-bilde"><img src="media/oss-svalbard.jpg" alt="Sofie og Sigve på dekk med snødekte fjell og hav i bakgrunnen" width="1400" height="1311"></figure>
+      <div class="om-rad">
+        <figure class="om-bilde"><img src="media/oss-svalbard.jpg" alt="Sofie og Sigve på dekk med snødekte fjell og hav i bakgrunnen" width="1400" height="1311"></figure>
+        <div class="om-tekst" id="omTekst1"></div>
+      </div>
+      <div class="om-rad om-rad-2">
       <div class="om-innhold">
         <div class="om-tekst" id="omTekst"></div>
         <div class="svar" id="svar">
@@ -258,6 +287,8 @@ const C = {
           <p class="done" id="pameldt" hidden>✓ Du har sendt svar fra denne enheten.</p>
         </div>
       </div>
+        <figure class="om-bilde hoy"><img src="media/kveld-ved-sjoen.jpg" alt="Sofie og Sigve ved sjøen i skumringen" width="768" height="1024" loading="lazy"></figure>
+      </div>
     </section>
 
     <!-- Bryllupsdagen -->
@@ -270,6 +301,12 @@ const C = {
       <ol class="tidslinje" id="tidslinje" aria-label="Tidslinje for bryllupshelgen"></ol>
       <div class="info-rad" id="dagInfo" role="group" aria-label="Mer informasjon om dagen"></div>
     </section>
+
+    <figure class="seksjon trio" aria-label="Bilder av Sofie og Sigve">
+      <img src="media/forlovelse-klem-genser.jpg" alt="Sofie og Sigve klemmer hverandre, med forlovelsesringen synlig" width="768" height="1024" loading="lazy">
+      <img src="media/paris-seinen-eiffel.jpg" alt="Sofie og Sigve ved Seinen med Eiffeltårnet i bakgrunnen" width="768" height="1024" loading="lazy">
+      <img src="media/vinter-luer-selfie.jpg" alt="Sofie og Sigve med luer under blå himmel" width="768" height="1024" loading="lazy">
+    </figure>
 
     <!-- Dagene før -->
     <section class="seksjon" id="dagene-for" data-toc="Dagene før" aria-labelledby="h-for">
@@ -296,6 +333,16 @@ const C = {
       <div class="map-frame"><iframe id="kart" title="Kart over Humlebæk med stedene for bryllupet" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
       <p class="kart-lenke"><a id="kartLenke" target="_blank" rel="noopener">Åpne kartet i Google Maps ↗</a></p>
       <ul class="pins" id="pins"></ul>
+    </section>
+
+    <!-- Bildekarusell -->
+    <section class="seksjon" id="bilder" data-toc="Bilder" aria-labelledby="h-bilder">
+      <h2 id="h-bilder">Bilder</h2>
+      <div class="karusell">
+        <button type="button" class="kar-knapp forrige" id="karForrige" aria-label="Forrige bilder">←</button>
+        <ul id="karusell" tabindex="0" aria-label="Bilder av Sofie og Sigve"></ul>
+        <button type="button" class="kar-knapp neste" id="karNeste" aria-label="Neste bilder">→</button>
+      </div>
     </section>
 
     <footer class="fot"><p>Sofie &amp; Sigve</p></footer>
@@ -341,6 +388,7 @@ const C = {
     </form>
 
     <div class="takk" id="takk" hidden>
+      <img class="takk-bilde" id="takkBilde" src="media/solnedgang-strand-selfie.jpg" alt="Sofie og Sigve på stranden i solnedgang" width="1024" height="768" loading="lazy">
       <p class="script" id="takkTittel">Tusen takk!</p>
       <p id="takkTekst"></p>
       <ul class="oppsummering" id="oppsummering"></ul>
@@ -442,8 +490,12 @@ function infoHtml(k) {
     ? `<p><strong>Pris:</strong> ${kr(i.pris)} NOK ${esc(i.prisNote || "")}</p><p>${esc(C.betaling)}</p>` : "");
 }
 
-$("#omTekst").innerHTML = avsnitt(C.intro);
-new IntersectionObserver(([e], obs) => { if (e.isIntersecting) { e.target.classList.add("vis"); obs.disconnect(); } }, { threshold: 0.15 }).observe($("#omTekst"));
+// Historien deles i to: første halvdel ved det første bildet, resten ved det andre
+const introDel = Math.ceil(C.intro.length / 2);
+$("#omTekst1").innerHTML = avsnitt(C.intro.slice(0, introDel));
+$("#omTekst").innerHTML = avsnitt(C.intro.slice(introDel));
+document.querySelectorAll(".om-tekst").forEach(el =>
+  new IntersectionObserver(([e], obs) => { if (e.isIntersecting) { e.target.classList.add("vis"); obs.disconnect(); } }, { threshold: 0.15 }).observe(el));
 $("#dagDato").textContent = C.bryllupsdagen.dato;
 $("#dagTekst").innerHTML = avsnitt(C.bryllupsdagen.tekst);
 $("#tidslinje").innerHTML = C.tidslinje.map(p => `
@@ -586,6 +638,23 @@ $("#fristIcs").onclick = () => lastNedIcs([fristHendelse], "svarfrist-sofie-sigv
     <li><span class="dot" style="background:${esc(s.farge)}"></span>
     <div>${esc(s.navn)}<br><span class="muted">${esc(s.info)}</span>
     ${s.lat != null ? `<br><a href="https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}" target="_blank" rel="noopener">Åpne i Google Maps</a>` : ""}</div></li>`).join("");
+})();
+
+/* ============ Bildekarusell ============ */
+(function () {
+  const ul = $("#karusell");
+  ul.innerHTML = C.bilder.map(b => `
+    <li><img src="media/${esc(b.fil)}" alt="${esc(b.alt)}" width="${b.b}" height="${b.h}" style="aspect-ratio:${b.b}/${b.h}" loading="lazy"></li>`).join("");
+  const bla = retning => ul.scrollBy({ left: retning * ul.clientWidth * 0.8, behavior: redusert ? "auto" : "smooth" });
+  $("#karForrige").onclick = () => bla(-1);
+  $("#karNeste").onclick = () => bla(1);
+  const oppdater = () => {
+    $("#karForrige").disabled = ul.scrollLeft < 4;
+    $("#karNeste").disabled = ul.scrollLeft + ul.clientWidth > ul.scrollWidth - 4;
+  };
+  ul.addEventListener("scroll", oppdater, { passive: true });
+  addEventListener("resize", oppdater);
+  oppdater();
 })();
 
 /* ============ Påmelding ============ */
@@ -738,6 +807,7 @@ form.addEventListener("submit", async e => {
   $("#betal").innerHTML = sum ? `<strong>Å betale: ${kr(sum)} NOK</strong> (${deler}).<br>${esc(C.betaling)}` : "";
 
   $("#kalBlokk").hidden = !kommer;
+  $("#takkBilde").hidden = !kommer;
   $("#googleListe").hidden = true; $("#kalGoogle").setAttribute("aria-expanded", "false");
   form.hidden = true; $("#takk").hidden = false; dlg.scrollTop = 0;
 });

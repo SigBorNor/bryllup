@@ -110,9 +110,16 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .knapp-linje{margin-top:1.25rem}
 
 /* ---------- Om oss: bilde og historie side om side, svarknapp under ---------- */
-.om{display:grid;gap:2.5rem;align-items:center;padding-top:4.5rem}
-@media (min-width:56rem){.om{grid-template-columns:1fr 1fr;gap:4rem}}
+.om{padding-top:4.5rem}
+.om-rad{display:grid;gap:2.5rem;align-items:center}
+.om-rad + .om-rad{margin-top:3rem}
+@media (min-width:56rem){
+  .om-rad{grid-template-columns:1fr 1fr;gap:4rem}
+  .om-rad + .om-rad{margin-top:5rem}
+}
+@media (max-width:55.99rem){.om-rad-2 .om-bilde{order:-1}}
 .om-bilde img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.om-bilde.hoy img{aspect-ratio:4/5}
 .om-tekst p{opacity:0;transform:translateY(10px);transition:opacity .8s ease,transform .8s ease}
 .om-tekst.vis p{opacity:1;transform:none}
 .om-tekst.vis p:nth-child(2){transition-delay:.15s}
@@ -199,6 +206,24 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .hotell dt{color:var(--muted)}
 .hotell dd{margin:0}
 .hotell-lenker{display:flex;flex-wrap:wrap;gap:.25rem 1.5rem;margin-top:.75rem}
+
+/* Tre bilder på rad */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+.trio img{width:100%;aspect-ratio:4/5;object-fit:cover}
+@media (max-width:40rem){.trio{gap:.4rem}}
+
+/* Bildekarusell: ruller sidelengs, med piler på store skjermer */
+.karusell{position:relative}
+#karusell{list-style:none;margin:0;padding:0 0 .75rem;display:flex;gap:.9rem;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+#karusell li{flex:none;scroll-snap-align:start}
+#karusell img{height:24rem;width:auto;max-width:none}
+@media (max-width:40rem){#karusell{gap:.5rem} #karusell img{height:17rem}}
+.kar-knapp{position:absolute;top:calc(50% - .4rem);transform:translateY(-50%);z-index:1;width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--linje);background:var(--papir);color:var(--ink);font:400 1.1rem/1 var(--f-serif);cursor:pointer}
+.kar-knapp.forrige{left:-.75rem}
+.kar-knapp.neste{right:-.75rem}
+.kar-knapp:hover{background:#fff}
+.kar-knapp:disabled{opacity:0;pointer-events:none}
+@media (hover:none){.kar-knapp{display:none}}
 
 /* Bredt bilde */
 .bred img{width:100%;aspect-ratio:21/9;object-fit:cover}
@@ -305,6 +330,7 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
 
 /* Takk */
 .takk{padding:1rem 0}
+.takk-bilde{width:100%;aspect-ratio:3/2;object-fit:cover;margin-bottom:1.5rem}
 .takk .script{font:400 2.6rem/1 var(--f-script);margin-bottom:1.25rem}
 .oppsummering{list-style:none;padding:1rem;margin:1.5rem 0 0;border:1px solid var(--tynn);background:var(--felt);display:grid;gap:.35rem}
 .betal{margin-top:1rem;background:var(--green);border:1px solid var(--linje);padding:.85rem 1rem}
