@@ -3,7 +3,7 @@
 Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette før du endrer noe.
 
 ## Arkitektur
-- **Statisk side** på GitHub Pages: `https://matsblar01.github.io/Sigves-brullyp/`. Ingen byggesteg, bare HTML, CSS og JS.
+- **Statisk side** på GitHub Pages: `https://sigbornor.github.io/bryllup/`. Ingen byggesteg, bare HTML, CSS og JS.
 - **Påmeldinger** sendes til et **Google Apps Script** (`apps-script.gs`), som skriver til et Google Regneark og sender en oppsummering på e-post. Regnearket har fanene **Oversikt**, **Svar** og **Innstillinger**.
 - **Kode-port:** én felles kode fra invitasjonskortet. Den ligger i `config.js` **og** i regnearket (Innstillinger!B1). Endres den, må den endres begge steder.
 - **Priser** (overnatting 800, brunsj 200 NOK) ligger i `C.info` i `index.html` **og** i regnearket (Innstillinger!B2–B3). Endres de, må de endres begge steder. Det samme gjelder betalingsteksten (`C.betaling` og Innstillinger!B4).

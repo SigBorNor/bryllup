@@ -194,18 +194,27 @@ function oppsett() {
 
   const o = bok.getSheetByName("Oversikt") || bok.insertSheet("Oversikt", 0);
   o.clear();
+
+  // Skilletegn i formler følger regnearkets språk: komma (engelsk) eller semikolon (norsk m.fl.).
+  // Vi prøver en testformel og ser hvilken som virker.
+  const prove = o.getRange("A1");
+  prove.setFormula("=SUM(1,1)");
+  SpreadsheetApp.flush();
+  const s = prove.getDisplayValue() === "2" ? "," : ";";
+  prove.clear();
+
   const tall = [
-    ["Kommer", '=COUNTIF(Svar!G2:G,"Ja")'],
-    ["Kan ikke komme", '=COUNTIF(Svar!G2:G,"Nei")'],
-    ["Torsdag – ja", '=COUNTIF(Svar!H2:H,"Ja")'],
-    ["Torsdag – vet ikke", '=COUNTIF(Svar!H2:H,"Vet ikke")'],
-    ["Fredag – ja", '=COUNTIF(Svar!I2:I,"Ja")'],
-    ["Fredag – vet ikke", '=COUNTIF(Svar!I2:I,"Vet ikke")'],
-    ["Lørdag", '=COUNTIF(Svar!J2:J,"Ja")'],
-    ["Søndag brunsj", '=COUNTIF(Svar!K2:K,"Ja")'],
-    ["Overnatting lør–søn", '=COUNTIF(Svar!L2:L,"Ja")'],
-    ["Antall påmeldinger", '=COUNTUNIQUE(Svar!B2:B)'],
-    ["Sum å betale (NOK)", '=SUM(Svar!N2:N)']
+    ["Kommer", `=COUNTIF(Svar!G2:G${s}"Ja")`],
+    ["Kan ikke komme", `=COUNTIF(Svar!G2:G${s}"Nei")`],
+    ["Torsdag – ja", `=COUNTIF(Svar!H2:H${s}"Ja")`],
+    ["Torsdag – vet ikke", `=COUNTIF(Svar!H2:H${s}"Vet ikke")`],
+    ["Fredag – ja", `=COUNTIF(Svar!I2:I${s}"Ja")`],
+    ["Fredag – vet ikke", `=COUNTIF(Svar!I2:I${s}"Vet ikke")`],
+    ["Lørdag", `=COUNTIF(Svar!J2:J${s}"Ja")`],
+    ["Søndag brunsj", `=COUNTIF(Svar!K2:K${s}"Ja")`],
+    ["Overnatting lør–søn", `=COUNTIF(Svar!L2:L${s}"Ja")`],
+    ["Antall påmeldinger", "=COUNTUNIQUE(Svar!B2:B)"],
+    ["Sum å betale (NOK)", "=SUM(Svar!N2:N)"]
   ];
   o.getRange("A1:B1").setValues([["Oversikt", "Antall"]]).setFontWeight("bold");
   tall.forEach(([navn, f], i) => {
@@ -214,7 +223,8 @@ function oppsett() {
   });
   const allergiRad = tall.length + 3;
   o.getRange(allergiRad, 1, 1, 2).setValues([["Allergier / mathensyn", ""]]).setFontWeight("bold");
-  o.getRange(allergiRad + 1, 1).setFormula('=IFERROR(FILTER({Svar!F2:F, Svar!M2:M}, Svar!M2:M<>""), "Ingen ennå")');
+  o.getRange(allergiRad + 1, 1).setFormula(`=IFERROR(FILTER(Svar!F2:F${s}Svar!M2:M<>"")${s}"Ingen ennå")`);
+  o.getRange(allergiRad + 1, 2).setFormula(`=IFERROR(FILTER(Svar!M2:M${s}Svar!M2:M<>"")${s}"")`);
   o.setColumnWidth(1, 220);
   o.setColumnWidth(2, 260);
 
