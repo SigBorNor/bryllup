@@ -60,7 +60,7 @@ Verdiene her kan endres uten å distribuere scriptet på nytt.
 ## 2. Publiser
 
 Last opp alle filene til GitHub-repoet (**Add file → Upload files**). Siden ligger på
-`https://sigbornor.github.io/bryllup/`
+`https://www.sofieogsigve.no/`
 
 ## 3. Test
 
@@ -79,7 +79,7 @@ Last opp alle filene til GitHub-repoet (**Add file → Upload files**). Siden li
 
 - Del regnearket med Sigve, Sofie og Anders (**Del**, øverst til høyre).
 - Ikke endre kolonnene i **Svar**. Vil dere jobbe videre med listen, for eksempel bordplassering eller hvem som har betalt, lag en egen fane som henter data fra **Svar**.
-- Lenke som slipper gjester rett inn: `https://sigbornor.github.io/bryllup/?kode=123`
+- Lenke som slipper gjester rett inn: `https://www.sofieogsigve.no/?kode=123`
 
 ## Oppdatere innhold
 

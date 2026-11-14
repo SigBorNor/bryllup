@@ -10,17 +10,15 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Bryllupsinvitasjon – Sofie & Sigve">
 <meta property="og:description" content="17. juli 2027 i Humlebæk, Danmark. Bruk koden fra invitasjonen.">
-<meta property="og:image" content="https://sigbornor.github.io/bryllup/media/deling.jpg">
-<meta property="og:url" content="https://sigbornor.github.io/bryllup/">
+<meta property="og:image" content="https://www.sofieogsigve.no/media/deling.jpg">
+<meta property="og:url" content="https://www.sofieogsigve.no/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌊</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Caveat&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="style.css">
 <script src="config.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 /* ============================================================
    INNHOLD – alt som står på siden ligger her.
@@ -162,17 +160,20 @@ const C = {
       tekst: ["Vi har samlet tips til ting å se og gjøre i og rundt Humlebæk."], visTips: true }
   ],
 
+  // Kartet er et Google My Maps-kart. Punktene endres i Google My Maps, ikke her.
+  // mid er ID-en fra innbyggingskoden (…/embed?mid=XXXX).
+  // steder: listen under kartet, med lenke til hvert sted i Google Maps.
   kart: {
+    mid: "13C9RRyiU2JKMPV5xLLmOFeS4qf_4Pbg",
     steder: [
       { navn: "Vielse", info: "Sted kommer", lat: null, lng: null, farge: "#E6E1BF" },
       { navn: "Krogerup Højskole", info: "Fest, overnatting og brunsj. Krogerupvej 13, 3050 Humlebæk", lat: 55.97352, lng: 12.53427, farge: "#D6E3EA" },
       { navn: "Humlebæk stasjon", info: "Tog langs kysten fra København og Helsingør", lat: 55.96374, lng: 12.53341, farge: "#ECE4D9" }
-    ],
-    rute: []
+    ]
   },
 
   sted: "Humlebæk, Danmark",
-  url: "https://sigbornor.github.io/bryllup/"
+  url: "https://www.sofieogsigve.no/"
 };
 </script>
 </head>
@@ -252,7 +253,8 @@ const C = {
     <!-- Kart -->
     <section class="seksjon" id="kart-seksjon" data-toc="Kart" aria-labelledby="h-kart">
       <h2 id="h-kart">Kart</h2>
-      <div class="map-frame"><div id="kart" role="region" aria-label="Kart over Humlebæk"></div></div>
+      <div class="map-frame"><iframe id="kart" title="Kart over Humlebæk med stedene for bryllupet" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+      <p class="kart-lenke"><a id="kartLenke" target="_blank" rel="noopener">Åpne kartet i Google Maps ↗</a></p>
       <ul class="pins" id="pins"></ul>
     </section>
 
@@ -515,31 +517,13 @@ $("#fristIcs").onclick = () => lastNedIcs([fristHendelse], "svarfrist-sofie-sigv
 
 /* ============ Kart ============ */
 (function () {
-  const steder = C.kart.steder.filter(s => s.lat != null);
+  const mid = encodeURIComponent(C.kart.mid || "");
+  $("#kart").src = `https://www.google.com/maps/d/embed?mid=${mid}&ehbc=2E312F`;
+  $("#kartLenke").href = `https://www.google.com/maps/d/viewer?mid=${mid}`;
   $("#pins").innerHTML = C.kart.steder.map(s => `
     <li><span class="dot" style="background:${esc(s.farge)}"></span>
     <div>${esc(s.navn)}<br><span class="muted">${esc(s.info)}</span>
     ${s.lat != null ? `<br><a href="https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}" target="_blank" rel="noopener">Åpne i Google Maps</a>` : ""}</div></li>`).join("");
-  if (!window.L || !steder.length) return;
-  let map;
-  // Kartet lages først når innholdet er synlig (etter koden)
-  const lag = () => {
-    if (map) return;
-    map = L.map("kart", { scrollWheelZoom: false, dragging: !L.Browser.mobile, tap: false });
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd", maxZoom: 19
-    }).addTo(map);
-    const pkt = [];
-    steder.forEach(s => {
-      const icon = L.divIcon({ className: "", html: `<div class="pin-icon" style="background:${s.farge}"></div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
-      L.marker([s.lat, s.lng], { icon }).addTo(map).bindPopup(`${esc(s.navn)}<br>${esc(s.info)}`);
-      pkt.push([s.lat, s.lng]);
-    });
-    if (C.kart.rute.length > 1) { L.polyline(C.kart.rute, { color: "#6E5C5E", weight: 2.5, dashArray: "6 8" }).addTo(map); pkt.push(...C.kart.rute); }
-    pkt.length > 1 ? map.fitBounds(pkt, { padding: [50, 50] }) : map.setView(pkt[0], 15);
-  };
-  new IntersectionObserver(([e]) => { if (e.isIntersecting) lag(); }, { rootMargin: "300px" }).observe($("#kart"));
 })();
 
 /* ============ Påmelding ============ */

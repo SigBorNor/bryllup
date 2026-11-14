@@ -190,10 +190,9 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 
 /* Kart */
 .map-frame{background:var(--yellow);padding:.9rem}
-#kart{height:24rem;background:#efece4;z-index:0}
-#kart .leaflet-tile-pane{filter:sepia(.3) saturate(.6) brightness(1.03)}
-.leaflet-container{font-family:var(--f-serif)}
-.pin-icon{width:16px;height:16px;border-radius:50%;border:2px solid var(--linje)}
+#kart{display:block;width:100%;height:28rem;border:0;background:#efece4}
+@media (max-width:40rem){#kart{height:24rem}}
+.kart-lenke{margin-top:.75rem;font-size:.9375rem}
 .pins{list-style:none;margin:1.75rem 0 0;padding:0;display:grid;gap:1rem}
 @media (min-width:56rem){.pins{grid-template-columns:repeat(3,1fr)}}
 .pins li{display:grid;grid-template-columns:1rem 1fr;gap:.75rem}
