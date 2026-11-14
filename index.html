@@ -152,12 +152,49 @@ const C = {
   // info: [...] henter tekstene over. visTips: true gir knapp til tipsene.
   praktisk: [
     { tittel: "På selve dagen", info: ["dresscode", "overnatting", "taler", "gaver"] },
-    { tittel: "Hoteller og rabattordning",
-      tekst: ["Overnatting torsdag og fredag ordner dere selv. Det finnes hoteller i Humlebæk og Helsingør, og sommerhus i nærheten.", "Informasjon om hoteller og rabattordning kommer."] },
+    { id: "hoteller", tittel: "Hoteller og rabattordning",
+      tekst: ["Overnatting torsdag og fredag ordner dere selv. Her er hotellene vi har vært i kontakt med, fra nærmest Humlebæk til København. Prisene er i danske kroner."],
+      visHoteller: true },
     { tittel: "Reise til området",
       tekst: ["Mer informasjon om reise til og fra bryllupet kommer senere."] },
     { tittel: "Ting å gjøre i området",
       tekst: ["Vi har samlet tips til ting å se og gjøre i og rundt Humlebæk."], visTips: true }
+  ],
+
+  // Hotellene i bolken «Hoteller og rabattordning».
+  // avtale: hva hotellet tilbyr gjestene våre. booking: hvordan gjestene bestiller.
+  // kart: det som skal søkes opp i Google Maps (navn og adresse).
+  hoteller: [
+    { navn: "Hotel Nybogaard", sted: "Kvistgård, ved Humlebæk",
+      tekst: "Gammel herregård ved Simon's Golf Club, like innenfor Humlebæk. Hotellgjester kan bestille starttid på golfbanen.",
+      avtale: "Åtte ledige rom bryllupshelgen: dobbeltrom 1450 kr og suiter 1850 kr per natt. Frokost kommer i tillegg.",
+      booking: "Detaljer kommer.",
+      nettside: "https://www.nybogaard.dk/", kart: "Hotel Nybogaard, Nybovej 5, 3490 Kvistgård" },
+    { navn: "Hotel Villa Brinkly", sted: "Snekkersten",
+      tekst: "Lite og hyggelig hotell med ti rom, skog i bakhagen og tre minutter å gå til vannet.",
+      avtale: "10 % rabatt ved to netter og 15 % ved tre netter.",
+      booking: "Detaljer kommer.",
+      nettside: "https://www.brinkly.dk/", kart: "Hotel Villa Brinkly, Strandvejen 258, 3070 Snekkersten" },
+    { navn: "Hotel Hamlet", sted: "Helsingør",
+      tekst: "Midt i Helsingør, nær togstasjonen.",
+      avtale: "Ingen rabatt i høysesongen.",
+      booking: "Bestill på hotellets nettside.",
+      nettside: "https://hotelhamlet.dk/", kart: "Hotel Hamlet, Bramstræde 5, 3000 Helsingør" },
+    { navn: "Rungstedgaard", sted: "Rungsted Kyst",
+      tekst: "Stort hotell ved Strandvejen, mellom Humlebæk og København.",
+      avtale: "Ingen rabatt i høysesongen.",
+      booking: "Bestill på hotellets nettside.",
+      nettside: "https://www.rungstedgaard.dk/", kart: "Rungstedgaard, Rungsted Strandvej 107, 2960 Rungsted Kyst" },
+    { navn: "Hotel Frihavnen", sted: "Nordhavn, København",
+      tekst: "I Nordhavn i København, seks minutter å gå fra Nordhavn stasjon.",
+      avtale: "Tilbud på 1550 kr per natt for standard dobbeltrom. Avtalen er ikke endelig bekreftet.",
+      booking: "Detaljer kommer.",
+      nettside: "https://hotelfrihavnen.dk/", kart: "Hotel Frihavnen, Århusgade 124B, 2150 Nordhavn" },
+    { navn: "Comwell Copenhagen Portside", sted: "Nordhavn, København",
+      tekst: "Ved vannet i Nordhavn, to minutter fra metrostasjonen Orientkaj. Restaurant, bar og treningsrom.",
+      avtale: "Tilbud 15.–18. juli: 1398 kr for én person og 1598 kr for to per natt, med frokost. Avtalen er ikke endelig bekreftet.",
+      booking: "Med bookingkode. Koden kommer.",
+      nettside: "https://comwell.com/", kart: "Comwell Copenhagen Portside, Alexandriagade 1, 2150 Nordhavn" }
   ],
 
   // Kartet er et Google My Maps-kart. Punktene endres i Google My Maps, ikke her.
@@ -239,7 +276,10 @@ const C = {
       <h2 id="h-for">Dagene før <span class="h-dato">15.–16. juli</span></h2>
       <p class="ingress" id="forIntro"></p>
       <div class="for-grid" id="forDager"></div>
-      <p class="merknad">Overnatting torsdag og fredag ordner dere selv. Se «Hoteller og rabattordning» under <a href="#praktisk">Praktisk info</a>.</p>
+      <div class="for-hotell">
+        <p class="merknad">Overnatting torsdag og fredag ordner dere selv. Vi har samlet hoteller i området.</p>
+        <button type="button" class="info-knapp" data-bolk="hoteller">Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
+      </div>
     </section>
 
     <!-- Praktisk info -->
@@ -426,12 +466,31 @@ $("#forDager").innerHTML = C.dager.filter(d => d.torfre).map(d => `
     ${d.visTips ? tipsKnapp : ""}
   </article>`).join("");
 
+const kartSok = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+const hotellHtml = () => `
+  <ul class="hotell-liste">${C.hoteller.map(h => `
+    <li class="hotell">
+      <p class="kort-dag">${esc(h.sted)}</p>
+      <h4>${esc(h.navn)}</h4>
+      <p>${esc(h.tekst)}</p>
+      <dl>
+        <dt>Avtale</dt><dd>${esc(h.avtale)}</dd>
+        <dt>Booking</dt><dd>${esc(h.booking)}</dd>
+      </dl>
+      <p class="hotell-lenker">
+        ${h.nettside ? `<a href="${esc(h.nettside)}" target="_blank" rel="noopener">Nettside ↗</a>` : ""}
+        ${h.kart ? `<a href="${esc(kartSok(h.kart))}" target="_blank" rel="noopener">Vis i kart ↗</a>` : ""}
+      </p>
+    </li>`).join("")}
+  </ul>`;
+
 $("#bolker").innerHTML = C.praktisk.map(b => `
-  <details class="bolk">
+  <details class="bolk"${b.id ? ` id="bolk-${esc(b.id)}"` : ""}>
     <summary><span>${esc(b.tittel)}</span><span class="pm" aria-hidden="true"></span></summary>
-    <div class="bolk-innhold">
+    <div class="bolk-innhold${b.visHoteller ? " bred-bolk" : ""}">
       ${avsnitt(b.tekst)}
       ${liste(b.info).map(k => `<div class="bolk-del"><h4>${esc(C.info[k].tittel)}</h4>${infoHtml(k)}</div>`).join("")}
+      ${b.visHoteller ? hotellHtml() : ""}
       ${b.visTips ? tipsKnapp : ""}
     </div>
   </details>`).join("");
@@ -457,6 +516,9 @@ document.addEventListener("click", e => {
   const info = e.target.closest("[data-info]");
   if (info) { e.preventDefault(); visInfo(info.dataset.info); return; }
   if (e.target.closest("[data-tips]")) { e.preventDefault(); $("#tipsDlg").showModal(); $("#tipsDlg").scrollTop = 0; return; }
+  // Knapp som åpner en bolk i «Praktisk info» og ruller dit
+  const tilBolk = e.target.closest("[data-bolk]");
+  if (tilBolk) { const b = $("#bolk-" + tilBolk.dataset.bolk); if (b) { b.open = true; rull(b); } return; }
   const lukk = e.target.closest("[data-lukk]");
   if (lukk) lukk.closest("dialog").close();
 });
