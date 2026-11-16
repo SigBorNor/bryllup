@@ -40,9 +40,8 @@ figure{margin:0}
 .small{font-size:.875rem}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-/* Overskrifter: versaler med luft og kort strek under */
-h2{font-weight:400;font-size:clamp(1.9rem,4.2vw,2.75rem);line-height:1.15;letter-spacing:.07em;text-transform:uppercase;margin:0 0 2.25rem;padding-bottom:1.1rem;position:relative}
-h2::after{content:"";position:absolute;left:0;bottom:0;width:3.5rem;height:1px;background:var(--linje)}
+/* Overskrifter: versaler med luft */
+h2{font-weight:400;font-size:clamp(1.9rem,4.2vw,2.75rem);line-height:1.15;letter-spacing:.07em;text-transform:uppercase;margin:0 0 1.75rem}
 h2 .h-dato{font-size:.6em;color:var(--muted);letter-spacing:.06em;margin-left:.5em;white-space:nowrap}
 h3{font-weight:500;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 .75rem}
 h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 .4rem}
@@ -71,15 +70,30 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 
 /* ---------- Siden og innholdsfortegnelsen ---------- */
 .side{background:var(--side);max-width:80rem;margin:0 auto;padding:0 clamp(1.5rem,6vw,6rem)}
-.seksjon{padding:5.5rem 0;scroll-margin-top:1rem}
-.seksjon + .seksjon{padding-top:3rem}
+.seksjon{padding:4rem 0;scroll-margin-top:1rem}
+.seksjon + .seksjon{padding-top:2.25rem}
+@media (max-width:40rem){
+  .seksjon{padding:2.5rem 0}
+  .seksjon + .seksjon{padding-top:1.5rem}
+}
 @media (min-width:72rem){
   .side{margin-left:var(--toc);margin-right:0;box-shadow:-10px 0 30px -18px rgba(60,50,52,.35)}
 }
 @media (min-width:94rem){ .side{margin-left:calc(var(--toc) + (100vw - var(--toc) - 80rem)/2)} }
 
-.toc{display:none}
+/* Små skjermer: knappen «Innhold» oppe til høyre åpner listen */
+.toc-knapp{position:fixed;top:calc(.75rem + env(safe-area-inset-top,0px));right:.75rem;z-index:30;display:inline-flex;align-items:center;gap:.5rem;background:var(--papir);color:var(--ink);border:1px solid var(--linje);border-radius:0;font:400 .8125rem/1 var(--f-serif);letter-spacing:.09em;text-transform:uppercase;padding:.7rem .85rem;cursor:pointer;box-shadow:0 4px 14px rgba(60,50,52,.15)}
+@media (max-width:71.99rem){
+  .toc{display:none;position:fixed;top:calc(3.75rem + env(safe-area-inset-top,0px));right:.75rem;z-index:30;min-width:13rem;background:var(--papir);border:1px solid var(--linje);padding:.6rem 1.25rem;box-shadow:0 8px 24px rgba(60,50,52,.2)}
+  .toc.aapen{display:block}
+  .toc.skjult{display:none}
+  .toc ol{list-style:none;margin:0;padding:0}
+  .toc li + li{border-top:1px solid var(--tynn)}
+  .toc a{display:block;padding:.8rem 0;text-decoration:none;font-size:.8125rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .toc a[aria-current]{color:var(--ink)}
+}
 @media (min-width:72rem){
+  .toc-knapp{display:none}
   .toc{display:block;position:fixed;top:2.5rem;left:1.5rem;width:calc(var(--toc) - 2rem);z-index:5;transition:opacity .3s}
   .toc.skjult{opacity:0;pointer-events:none}
   .toc ol{list-style:none;margin:0;padding:.25rem 0 .25rem 1.25rem;border-left:1px solid var(--linje)}
@@ -110,18 +124,22 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .knapp-linje{margin-top:1.25rem}
 
 /* ---------- Om oss: bilde og historie side om side, svarknapp under ---------- */
-.om{padding-top:4.5rem}
+.om{padding-top:3.5rem}
+@media (max-width:40rem){.om{padding-top:2.5rem}}
+/* Under 72rem ligger knappen «Innhold» oppe til høyre: la overskriftene lande under den */
+@media (max-width:71.99rem){.seksjon{scroll-margin-top:3.5rem} .seksjon.om{scroll-margin-top:0}}
 .om-rad{display:grid;gap:2rem;align-items:center}
 .om-rad + .om-rad{margin-top:2.5rem}
 .om-bilde{max-width:22rem}
+.om-bilde.liggende{max-width:28rem}
 @media (min-width:56rem){
-  .om-rad{grid-template-columns:20rem 1fr;gap:3.5rem}
-  .om-rad-2{grid-template-columns:1fr 20rem}
+  .om-rad-1{grid-template-columns:1fr 24rem;gap:3.5rem}
+  .om-rad-2{grid-template-columns:20rem 1fr;gap:3.5rem}
   .om-rad + .om-rad{margin-top:2rem}
 }
-@media (max-width:55.99rem){.om-rad-2 .om-bilde{order:-1}}
+@media (max-width:55.99rem){.om-rad-1 .om-bilde{order:-1}}
 .om-bilde img{width:100%;aspect-ratio:1/1;object-fit:cover}
-.om-bilde.hoy img{object-position:50% 30%}
+.om-bilde.liggende img{aspect-ratio:4/3;object-position:30% 50%}
 .om-tekst p{opacity:0;transform:translateY(10px);transition:opacity .8s ease,transform .8s ease}
 .om-tekst.vis p{opacity:1;transform:none}
 .om-tekst.vis p:nth-child(2){transition-delay:.15s}
@@ -167,6 +185,10 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 
 /* ---------- Dagene før: to dager skilt med en strek ---------- */
 .ingress{max-width:38rem;margin-bottom:2rem}
+/* Dagene før: teksten til venstre, boks om overnatting til høyre */
+.for-topp{display:grid;gap:1.5rem 3.5rem;align-items:start;margin-bottom:2.25rem}
+.for-topp .ingress{margin-bottom:0}
+@media (min-width:56rem){.for-topp{grid-template-columns:minmax(0,38rem) minmax(16rem,22rem);justify-content:space-between}}
 .for-grid{display:grid}
 .for-dag{padding:0 0 1.75rem}
 .for-dag + .for-dag{border-top:1px solid var(--linje);padding:1.75rem 0 0}
@@ -179,8 +201,9 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .for-dag dl{display:grid;grid-template-columns:max-content 1fr;column-gap:1.5rem;margin:1rem 0 0}
 .for-dag dd{margin:0}
 .merknad{margin-top:2rem;font-size:.9375rem;font-style:italic;color:var(--muted)}
-.for-hotell{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--tynn)}
-.for-hotell .merknad{margin:0}
+.for-hotell{background:var(--green);border:1px solid var(--linje);padding:1.1rem 1.25rem 1.25rem;font-size:.9375rem;line-height:1.65}
+.for-hotell .info-knapp{margin-top:.9rem;background:var(--felt);font-size:.9375rem}
+.for-hotell .info-knapp:hover{background:#fff}
 
 /* ---------- Praktisk info: bolker som åpnes ---------- */
 .bolker{border-top:1px solid var(--linje)}
@@ -240,7 +263,7 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .pins li{display:grid;grid-template-columns:1rem 1fr;gap:.75rem}
 .dot{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--linje);margin-top:.45rem}
 
-.fot{padding:3rem 0 5rem;text-align:center}
+.fot{padding:2rem 0 4.5rem;text-align:center}
 .fot p{font:400 2.2rem/1 var(--f-script);color:var(--muted)}
 
 /* Flytende svarknapp: vises når den vanlige knappen ikke er på skjermen */

@@ -60,9 +60,12 @@ const C = {
   ],
 
   // Knappene under tidslinjen. Navnene viser til «info» lenger ned.
-  dagInfo: ["dresscode", "overnatting", "taler", "gaver"],
+  dagInfo: ["dresscode", "overnatting", "taler", "gaver", "reise"],
 
   dageneForIntro: "Vi inviterer først og fremst til bryllup og bryllupsfest lørdag til søndag. Samtidig ser vi for oss at flere har lyst til å tilbringe litt mer tid rundt Humlebæk eller i København, og det synes vi er veldig hyggelig! For de som er i området vil vi invitere til en lavterskel sammenkomst på torsdag ettermiddag mens på fredag blir det ikke noe offisielt opplegg annet enn å nyte nærområdet og lade godt opp.",
+
+  // Boksen til høyre for teksten over. Knappen under åpner hotellene i «Praktisk info».
+  dageneForHotell: "Om dere vil være i området noen dager før bryllupet så ordner dere med overnatting selv. Vi har ordnet rabattordning på noen fine hoteller i området her.",
 
   // Dagene. torfre: true = vises under «Dagene før». visTips: true = knapp som åpner tipsene.
   dager: [
@@ -138,6 +141,10 @@ const C = {
       tittel: "Gaver",
       tekst: ["Informasjon om gaver kommer."]
     },
+    reise: {
+      tittel: "Reise til Humlebæk",
+      tekst: ["Mer informasjon om reise til og fra bryllupet kommer senere."]
+    },
     brunsj: {
       tittel: "Brunsj søndag",
       kort: "Brunsj på Krogerup Højskole søndag kl. 10:00.",
@@ -149,14 +156,14 @@ const C = {
   },
 
   // Praktisk info: fire bolker som åpnes ved klikk.
-  // info: [...] henter tekstene over. visTips: true gir knapp til tipsene.
+  // info: [...] henter tekstene over. tekstFra: "reise" bruker teksten fra info.reise.
+  // visTips: true gir knapp til tipsene.
   praktisk: [
     { tittel: "På selve dagen", info: ["dresscode", "overnatting", "taler", "gaver"] },
     { id: "hoteller", tittel: "Hoteller og rabattordning",
       tekst: ["Overnatting torsdag og fredag ordner dere selv. Her er hotellene vi har vært i kontakt med, fra nærmest Humlebæk til København. Prisene er i danske kroner."],
       visHoteller: true },
-    { tittel: "Reise til området",
-      tekst: ["Mer informasjon om reise til og fra bryllupet kommer senere."] },
+    { tittel: "Reise til området", tekstFra: "reise" },
     { tittel: "Ting å gjøre i området",
       tekst: ["Vi har samlet tips til ting å se og gjøre i og rundt Humlebæk."], visTips: true }
   ],
@@ -165,7 +172,7 @@ const C = {
   // fil ligger i media/. b og h er bildets bredde og høyde i piksler.
   bilder: [
     { fil: "oss-svalbard.jpg", b: 1400, h: 1311, alt: "Sofie og Sigve på dekk med snødekte fjell i bakgrunnen" },
-    { fil: "forlovelse-ring-latter.jpg", b: 768, h: 1024, alt: "Sofie ler og viser fram forlovelsesringen" },
+    { fil: "hoddevik-surf-strand.jpg", b: 1600, h: 1066, alt: "Sofie og Sigve i våtdrakt på stranden i Hoddevik, med surfebrett i sanden" },
     { fil: "surf.jpg", b: 1320, h: 755, alt: "Sofie og Sigve på surfebrett i havet" },
     { fil: "paris-louvre.jpg", b: 768, h: 1024, alt: "Sofie og Sigve foran Louvre i Paris" },
     { fil: "ski-topptur-selfie.jpg", b: 769, h: 1024, alt: "Sofie og Sigve på skitur i fjellet" },
@@ -262,32 +269,33 @@ const C = {
 </header>
 
 <div id="innhold" hidden>
+  <button type="button" class="toc-knapp" id="tocKnapp" aria-expanded="false" aria-controls="toc" hidden><span aria-hidden="true">☰</span> Innhold</button>
   <nav class="toc skjult" id="toc" aria-label="Innhold"><ol></ol></nav>
 
   <main class="side">
     <!-- Om oss, med svarknappen under historien -->
     <section class="seksjon om" id="om-oss" data-toc="Om oss" aria-label="Om oss">
-      <div class="om-rad">
-        <figure class="om-bilde"><img src="media/oss-svalbard.jpg" alt="Sofie og Sigve på dekk med snødekte fjell og hav i bakgrunnen" width="1400" height="1311"></figure>
+      <div class="om-rad om-rad-1">
         <div class="om-tekst" id="omTekst1"></div>
+        <figure class="om-bilde liggende"><img src="media/hoddevik-surf-strand.jpg" alt="Sofie og Sigve i våtdrakt på stranden i Hoddevik, med surfebrett i sanden" width="1600" height="1066"></figure>
       </div>
       <div class="om-rad om-rad-2">
-      <div class="om-innhold">
-        <div class="om-tekst" id="omTekst"></div>
-        <div class="svar" id="svar">
-          <p class="frist">Svar innen <span id="frist"></span></p>
-          <div class="actions">
-            <button class="btn" id="aapne">Svar på invitasjonen</button>
-            <button class="textlink" id="fristKal" aria-expanded="false" aria-controls="fristValg">+ Legg i kalender</button>
+        <figure class="om-bilde"><img src="media/oss-svalbard.jpg" alt="Sofie og Sigve på dekk med snødekte fjell og hav i bakgrunnen" width="1400" height="1311" loading="lazy"></figure>
+        <div class="om-innhold">
+          <div class="om-tekst" id="omTekst"></div>
+          <div class="svar" id="svar">
+            <p class="frist">Svar innen <span id="frist"></span></p>
+            <div class="actions">
+              <button class="btn" id="aapne">Svar på invitasjonen</button>
+              <button class="textlink" id="fristKal" aria-expanded="false" aria-controls="fristValg">+ Legg i kalender</button>
+            </div>
+            <div class="kalvalg" id="fristValg" hidden>
+              <a class="ghostbtn" id="fristGoogle" target="_blank" rel="noopener">Google Kalender ↗</a>
+              <button class="ghostbtn" id="fristIcs">Apple / Outlook</button>
+            </div>
+            <p class="done" id="pameldt" hidden>✓ Du har sendt svar fra denne enheten.</p>
           </div>
-          <div class="kalvalg" id="fristValg" hidden>
-            <a class="ghostbtn" id="fristGoogle" target="_blank" rel="noopener">Google Kalender ↗</a>
-            <button class="ghostbtn" id="fristIcs">Apple / Outlook</button>
-          </div>
-          <p class="done" id="pameldt" hidden>✓ Du har sendt svar fra denne enheten.</p>
         </div>
-      </div>
-        <figure class="om-bilde hoy"><img src="media/kveld-ved-sjoen.jpg" alt="Sofie og Sigve ved sjøen i skumringen" width="768" height="1024" loading="lazy"></figure>
       </div>
     </section>
 
@@ -305,30 +313,26 @@ const C = {
     <figure class="seksjon trio" aria-label="Bilder av Sofie og Sigve">
       <img src="media/forlovelse-klem-genser.jpg" alt="Sofie og Sigve klemmer hverandre, med forlovelsesringen synlig" width="768" height="1024" loading="lazy">
       <img src="media/paris-seinen-eiffel.jpg" alt="Sofie og Sigve ved Seinen med Eiffeltårnet i bakgrunnen" width="768" height="1024" loading="lazy">
-      <img src="media/vinter-luer-selfie.jpg" alt="Sofie og Sigve med luer under blå himmel" width="768" height="1024" loading="lazy">
+      <img src="media/ski-topptur-selfie.jpg" alt="Sofie og Sigve på skitur i fjellet" width="769" height="1024" loading="lazy">
     </figure>
 
     <!-- Dagene før -->
     <section class="seksjon" id="dagene-for" data-toc="Dagene før" aria-labelledby="h-for">
       <h2 id="h-for">Dagene før <span class="h-dato">15.–16. juli</span></h2>
-      <p class="ingress" id="forIntro"></p>
-      <div class="for-grid" id="forDager"></div>
-      <div class="for-hotell">
-        <p class="merknad">Overnatting torsdag og fredag ordner dere selv. Vi har samlet hoteller i området.</p>
-        <button type="button" class="info-knapp" data-bolk="hoteller">Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
+      <div class="for-topp">
+        <p class="ingress" id="forIntro"></p>
+        <aside class="for-hotell" aria-label="Overnatting dagene før">
+          <p id="forHotell"></p>
+          <button type="button" class="info-knapp" data-bolk="hoteller">Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
+        </aside>
       </div>
-    </section>
-
-    <!-- Praktisk info -->
-    <section class="seksjon" id="praktisk" data-toc="Praktisk info" aria-labelledby="h-praktisk">
-      <h2 id="h-praktisk">Praktisk info</h2>
-      <div class="bolker" id="bolker"></div>
+      <div class="for-grid" id="forDager"></div>
     </section>
 
     <figure class="seksjon trio" aria-label="Flere bilder av Sofie og Sigve">
-      <img src="media/forlovelse-ring-latter.jpg" alt="Sofie ler og viser fram forlovelsesringen" width="768" height="1024" loading="lazy">
+      <img src="media/vinter-akebrett.jpg" alt="Sofie og Sigve på slede i snøen" width="1400" height="1600" loading="lazy">
       <img src="media/surf-paa-vei-ut.jpg" alt="Sofie og Sigve bærer surfebrett over hodet på stranden" width="768" height="1024" loading="lazy">
-      <img src="media/ski-topptur-selfie.jpg" alt="Sofie og Sigve på skitur i fjellet" width="769" height="1024" loading="lazy">
+      <img src="media/fest-dress-og-kjole.jpg" alt="Sofie og Sigve i kjole og dress på fest" width="724" height="1086" loading="lazy">
     </figure>
 
     <!-- Kart -->
@@ -347,6 +351,12 @@ const C = {
         <ul id="karusell" tabindex="0" aria-label="Bilder av Sofie og Sigve"></ul>
         <button type="button" class="kar-knapp neste" id="karNeste" aria-label="Neste bilder">→</button>
       </div>
+    </section>
+
+    <!-- Praktisk info -->
+    <section class="seksjon" id="praktisk" data-toc="Praktisk info" aria-labelledby="h-praktisk">
+      <h2 id="h-praktisk">Praktisk info</h2>
+      <div class="bolker" id="bolker"></div>
     </section>
 
     <footer class="fot"><p>Sofie &amp; Sigve</p></footer>
@@ -513,6 +523,7 @@ $("#dagInfo").innerHTML = C.dagInfo.map(k =>
   `<button type="button" class="info-knapp" data-info="${esc(k)}">${iMerke}${esc(C.info[k].tittel)}</button>`).join("");
 
 $("#forIntro").textContent = C.dageneForIntro;
+$("#forHotell").textContent = C.dageneForHotell;
 $("#forDager").innerHTML = C.dager.filter(d => d.torfre).map(d => `
   <article class="for-dag">
     <p class="kort-dag">${esc(d.fane.replace(".", ". juli"))}</p>
@@ -544,7 +555,7 @@ $("#bolker").innerHTML = C.praktisk.map(b => `
   <details class="bolk"${b.id ? ` id="bolk-${esc(b.id)}"` : ""}>
     <summary><span>${esc(b.tittel)}</span><span class="pm" aria-hidden="true"></span></summary>
     <div class="bolk-innhold${b.visHoteller ? " bred-bolk" : ""}">
-      ${avsnitt(b.tekst)}
+      ${avsnitt(b.tekstFra ? C.info[b.tekstFra].tekst : b.tekst)}
       ${liste(b.info).map(k => `<div class="bolk-del"><h4>${esc(C.info[k].tittel)}</h4>${infoHtml(k)}</div>`).join("")}
       ${b.visHoteller ? hotellHtml() : ""}
       ${b.visTips ? tipsKnapp : ""}
@@ -586,7 +597,13 @@ const toc = $("#toc"), flyt = $("#flyt");
 const tocSeksjoner = [...document.querySelectorAll("[data-toc]")];
 $("ol", toc).innerHTML = tocSeksjoner.map(s => `<li><a href="#${s.id}">${esc(s.dataset.toc)}</a></li>`).join("");
 const tocLenker = [...toc.querySelectorAll("a")];
-tocLenker.forEach((a, i) => a.addEventListener("click", e => { e.preventDefault(); rull(tocSeksjoner[i]); }));
+// På små skjermer åpnes innholdsfortegnelsen med knappen «Innhold»
+const tocKnapp = $("#tocKnapp");
+const lukkToc = () => { toc.classList.remove("aapen"); tocKnapp.setAttribute("aria-expanded", "false"); };
+tocKnapp.onclick = () => tocKnapp.setAttribute("aria-expanded", toc.classList.toggle("aapen"));
+document.addEventListener("click", e => { if (!e.target.closest("#toc, #tocKnapp")) lukkToc(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") lukkToc(); });
+tocLenker.forEach((a, i) => a.addEventListener("click", e => { e.preventDefault(); lukkToc(); rull(tocSeksjoner[i]); }));
 let knappSynlig = true;
 function oppdaterToc() {
   const linje = innerHeight * 0.4;
@@ -595,6 +612,8 @@ function oppdaterToc() {
   tocLenker.forEach((a, i) => a.toggleAttribute("aria-current", i === aktiv));
   const iToppen = $("#topp").getBoundingClientRect().bottom > innerHeight * 0.5;
   toc.classList.toggle("skjult", iToppen);
+  tocKnapp.hidden = iToppen;
+  if (iToppen) lukkToc();
   // Flytende svarknapp: vises når den vanlige knappen ikke er på skjermen
   flyt.hidden = !APEN || knappSynlig || iToppen;
 }
