@@ -64,7 +64,7 @@ const C = {
 
   dageneForIntro: "Vi inviterer først og fremst til bryllup og bryllupsfest lørdag til søndag. Samtidig ser vi for oss at flere har lyst til å tilbringe litt mer tid rundt Humlebæk eller i København, og det synes vi er veldig hyggelig! For de som er i området vil vi invitere til en lavterskel sammenkomst på torsdag ettermiddag mens på fredag blir det ikke noe offisielt opplegg annet enn å nyte nærområdet og lade godt opp.",
 
-  // Boksen til høyre for teksten over. Knappen under åpner hotellene i «Praktisk info».
+  // Boksen til høyre for teksten over, og kolonnen «Dagene rundt» under «Overnatting» i Praktisk info. Knappen åpner hotelloversikten.
   dageneForHotell: "Om dere vil være i området noen dager før bryllupet så ordner dere med overnatting selv. Vi har ordnet rabattordning på noen fine hoteller i området her.",
 
   // Dagene. torfre: true = vises under «Dagene før». visTips: true = knapp som åpner tipsene.
@@ -159,10 +159,11 @@ const C = {
   // info: [...] henter tekstene over. tekstFra: "reise" bruker teksten fra info.reise.
   // visTips: true gir knapp til tipsene.
   praktisk: [
-    { tittel: "På selve dagen", info: ["dresscode", "overnatting", "taler", "gaver"] },
-    { id: "hoteller", tittel: "Hoteller og rabattordning",
-      tekst: ["Overnatting torsdag og fredag ordner dere selv. Øverst er hotellene der vi har fått en avtale for gjestene våre. Under ligger andre hoteller i området. Prisene er i danske kroner."],
-      visHoteller: true },
+    { tittel: "På selve dagen", info: ["dresscode", "taler", "gaver"] },
+    // «Overnatting» har to kolonner: «Bryllupet» viser C.info.overnatting, «Dagene rundt» viser C.dageneForHotell.
+    // Knappen i «Dagene rundt» åpner hotelloversikten (C.hoteller), med hotellTekst som innledning.
+    { id: "overnatting", tittel: "Overnatting", visOvernatting: true,
+      hotellTekst: ["Øverst er hotellene der vi har fått en avtale for gjestene våre. Under ligger andre hoteller i området. Prisene er i danske kroner."] },
     { tittel: "Reise til området", tekstFra: "reise" },
     { tittel: "Ting å gjøre i området",
       tekst: ["Vi har samlet tips til ting å se og gjøre i og rundt Humlebæk."], visTips: true }
@@ -325,7 +326,7 @@ const C = {
         <p class="ingress" id="forIntro"></p>
         <aside class="for-hotell" aria-label="Overnatting dagene før">
           <p id="forHotell"></p>
-          <button type="button" class="info-knapp" data-bolk="hoteller">Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
+          <button type="button" class="info-knapp" data-bolk="overnatting" data-vis-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
         </aside>
       </div>
       <div class="for-grid" id="forDager"></div>
@@ -557,14 +558,31 @@ const hotellGruppe = (tittel, liste) => liste.length ? `
 const hotellHtml = () =>
   hotellGruppe("Hoteller med avtale", C.hoteller.filter(h => h.avtaleOmrade)) +
   hotellGruppe("Andre hoteller", C.hoteller.filter(h => !h.avtaleOmrade));
+const overnattingHtml = b => `
+  <div class="overnatting-grid">
+    <div class="overnatting-del">
+      <h4>Bryllupet</h4>
+      <p class="kort-dag">Lør–søn</p>
+      ${infoHtml("overnatting")}
+    </div>
+    <div class="overnatting-del">
+      <h4>Dagene rundt</h4>
+      ${avsnitt(C.dageneForHotell)}
+      <p class="knapp-linje"><button type="button" class="info-knapp" id="hotellKnapp" aria-expanded="false" aria-controls="hotellOversikt"><span>Se hoteller og rabattordning</span> <span aria-hidden="true">→</span></button></p>
+    </div>
+  </div>
+  <div class="hotell-oversikt" id="hotellOversikt" hidden>
+    ${avsnitt(b.hotellTekst)}
+    ${hotellHtml()}
+  </div>`;
 
 $("#bolker").innerHTML = C.praktisk.map(b => `
   <details class="bolk"${b.id ? ` id="bolk-${esc(b.id)}"` : ""}>
     <summary><span>${esc(b.tittel)}</span><span class="pm" aria-hidden="true"></span></summary>
-    <div class="bolk-innhold${b.visHoteller ? " bred-bolk" : ""}">
+    <div class="bolk-innhold${b.visOvernatting ? " bred-bolk" : ""}">
       ${avsnitt(b.tekstFra ? C.info[b.tekstFra].tekst : b.tekst)}
       ${liste(b.info).map(k => `<div class="bolk-del"><h4>${esc(C.info[k].tittel)}</h4>${infoHtml(k)}</div>`).join("")}
-      ${b.visHoteller ? hotellHtml() : ""}
+      ${b.visOvernatting ? overnattingHtml(b) : ""}
       ${b.visTips ? tipsKnapp : ""}
     </div>
   </details>`).join("");
@@ -586,13 +604,24 @@ function visInfo(k) {
   $("#infoTekst").innerHTML = infoHtml(k);
   $("#infoDlg").showModal();
 }
+// Viser eller skjuler hotelloversikten under «Overnatting»
+function visHoteller(vis) {
+  $("#hotellOversikt").hidden = !vis;
+  $("#hotellKnapp").setAttribute("aria-expanded", vis);
+  $("#hotellKnapp span").textContent = vis ? "Skjul hotellene" : "Se hoteller og rabattordning";
+}
 document.addEventListener("click", e => {
   const info = e.target.closest("[data-info]");
   if (info) { e.preventDefault(); visInfo(info.dataset.info); return; }
   if (e.target.closest("[data-tips]")) { e.preventDefault(); $("#tipsDlg").showModal(); $("#tipsDlg").scrollTop = 0; return; }
   // Knapp som åpner en bolk i «Praktisk info» og ruller dit
   const tilBolk = e.target.closest("[data-bolk]");
-  if (tilBolk) { const b = $("#bolk-" + tilBolk.dataset.bolk); if (b) { b.open = true; rull(b); } return; }
+  if (tilBolk) {
+    const b = $("#bolk-" + tilBolk.dataset.bolk);
+    if (b) { b.open = true; if ("visHoteller" in tilBolk.dataset) { visHoteller(true); rull($("#hotellOversikt")); } else rull(b); }
+    return;
+  }
+  if (e.target.closest("#hotellKnapp")) { visHoteller($("#hotellOversikt").hidden); return; }
   const lukk = e.target.closest("[data-lukk]");
   if (lukk) lukk.closest("dialog").close();
 });
