@@ -161,7 +161,7 @@ const C = {
   praktisk: [
     { tittel: "På selve dagen", info: ["dresscode", "overnatting", "taler", "gaver"] },
     { id: "hoteller", tittel: "Hoteller og rabattordning",
-      tekst: ["Overnatting torsdag og fredag ordner dere selv. Her er hotellene vi har vært i kontakt med, fra nærmest Humlebæk til København. Prisene er i danske kroner."],
+      tekst: ["Overnatting torsdag og fredag ordner dere selv. Øverst er hotellene der vi har fått en avtale for gjestene våre. Under ligger andre hoteller i området. Prisene er i danske kroner."],
       visHoteller: true },
     { tittel: "Reise til området", tekstFra: "reise" },
     { tittel: "Ting å gjøre i området",
@@ -194,19 +194,31 @@ const C = {
   ],
 
   // Hotellene i bolken «Hoteller og rabattordning».
+  // avtaleOmrade: true gjør at hotellet vises under «Hoteller med avtale». De andre vises under «Andre hoteller».
+  // Innenfor hver gruppe vises hotellene i rekkefølgen her (nærmest Humlebæk først).
   // avtale: hva hotellet tilbyr gjestene våre. booking: hvordan gjestene bestiller.
   // kart: det som skal søkes opp i Google Maps (navn og adresse).
   hoteller: [
-    { navn: "Hotel Nybogaard", sted: "Kvistgård, ved Humlebæk",
-      tekst: "Gammel herregård ved Simon's Golf Club, like innenfor Humlebæk. Hotellgjester kan bestille starttid på golfbanen.",
-      avtale: "Åtte ledige rom bryllupshelgen: dobbeltrom 1450 kr og suiter 1850 kr per natt. Frokost kommer i tillegg.",
-      booking: "Detaljer kommer.",
-      nettside: "https://www.nybogaard.dk/", kart: "Hotel Nybogaard, Nybovej 5, 3490 Kvistgård" },
-    { navn: "Hotel Villa Brinkly", sted: "Snekkersten",
+    { navn: "Hotel Villa Brinkly", sted: "Snekkersten", avtaleOmrade: true,
       tekst: "Lite og hyggelig hotell med ti rom, skog i bakhagen og tre minutter å gå til vannet.",
       avtale: "10 % rabatt ved to netter og 15 % ved tre netter.",
       booking: "Detaljer kommer.",
       nettside: "https://www.brinkly.dk/", kart: "Hotel Villa Brinkly, Strandvejen 258, 3070 Snekkersten" },
+    { navn: "Hotel Frihavnen", sted: "Nordhavn, København", avtaleOmrade: true,
+      tekst: "I Nordhavn i København, seks minutter å gå fra Nordhavn stasjon.",
+      avtale: "1550 kr per natt for standard dobbeltrom, samme pris alle netter 14.–18. juli. Frokost kommer i tillegg (200 kr per person per natt). Gratis avbestilling frem til 24 timer før ankomst.",
+      booking: "Send en e-post til hello@hotelfrihavnen.dk. Skriv hvilke netter dere vil bo, og at dere skal i bryllupet til Sofie og Sigve.",
+      nettside: "https://hotelfrihavnen.dk/", kart: "Hotel Frihavnen, Århusgade 124B, 2150 Nordhavn" },
+    { navn: "Comwell Copenhagen Portside", sted: "Nordhavn, København", avtaleOmrade: true,
+      tekst: "Ved vannet i Nordhavn, to minutter fra metrostasjonen Orientkaj. Restaurant, bar og treningsrom.",
+      avtale: "15.–18. juli: 1398 kr for én person og 1598 kr for to per natt, med frokost. Samme pris alle netter.",
+      booking: "Med bookingkode. Koden kommer. Bestill senest 30 dager før ankomst for å få avtaleprisen.",
+      nettside: "https://comwell.com/", kart: "Comwell Copenhagen Portside, Alexandriagade 1, 2150 Nordhavn" },
+    { navn: "Hotel Nybogaard", sted: "Kvistgård, ved Humlebæk",
+      tekst: "Gammel herregård ved Simon's Golf Club, like innenfor Humlebæk. Hotellgjester kan bestille starttid på golfbanen.",
+      avtale: "Ingen rabatt, men hotellet hadde åtte ledige rom bryllupshelgen da vi spurte: dobbeltrom 1450 kr og suiter 1850 kr per natt. Frokost kommer i tillegg.",
+      booking: "Bestill på hotellets nettside. Det er få rom, så bestill tidlig.",
+      nettside: "https://www.nybogaard.dk/", kart: "Hotel Nybogaard, Nybovej 5, 3490 Kvistgård" },
     { navn: "Hotel Hamlet", sted: "Helsingør",
       tekst: "Midt i Helsingør, nær togstasjonen.",
       avtale: "Ingen rabatt i høysesongen.",
@@ -216,17 +228,7 @@ const C = {
       tekst: "Stort hotell ved Strandvejen, mellom Humlebæk og København.",
       avtale: "Ingen rabatt i høysesongen.",
       booking: "Bestill på hotellets nettside.",
-      nettside: "https://www.rungstedgaard.dk/", kart: "Rungstedgaard, Rungsted Strandvej 107, 2960 Rungsted Kyst" },
-    { navn: "Hotel Frihavnen", sted: "Nordhavn, København",
-      tekst: "I Nordhavn i København, seks minutter å gå fra Nordhavn stasjon.",
-      avtale: "Tilbud på 1550 kr per natt for standard dobbeltrom. Avtalen er ikke endelig bekreftet.",
-      booking: "Detaljer kommer.",
-      nettside: "https://hotelfrihavnen.dk/", kart: "Hotel Frihavnen, Århusgade 124B, 2150 Nordhavn" },
-    { navn: "Comwell Copenhagen Portside", sted: "Nordhavn, København",
-      tekst: "Ved vannet i Nordhavn, to minutter fra metrostasjonen Orientkaj. Restaurant, bar og treningsrom.",
-      avtale: "Tilbud 15.–18. juli: 1398 kr for én person og 1598 kr for to per natt, med frokost. Avtalen er ikke endelig bekreftet.",
-      booking: "Med bookingkode. Koden kommer.",
-      nettside: "https://comwell.com/", kart: "Comwell Copenhagen Portside, Alexandriagade 1, 2150 Nordhavn" }
+      nettside: "https://www.rungstedgaard.dk/", kart: "Rungstedgaard, Rungsted Strandvej 107, 2960 Rungsted Kyst" }
   ],
 
   // Kartet er et Google My Maps-kart. Punktene endres i Google My Maps, ikke her.
@@ -534,22 +536,27 @@ $("#forDager").innerHTML = C.dager.filter(d => d.torfre).map(d => `
   </article>`).join("");
 
 const kartSok = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
-const hotellHtml = () => `
-  <ul class="hotell-liste">${C.hoteller.map(h => `
+const hotellKort = h => `
     <li class="hotell">
       <p class="kort-dag">${esc(h.sted)}</p>
       <h4>${esc(h.navn)}</h4>
       <p>${esc(h.tekst)}</p>
       <dl>
-        <dt>Avtale</dt><dd>${esc(h.avtale)}</dd>
+        <dt>${h.avtaleOmrade ? "Avtale" : "Pris"}</dt><dd>${esc(h.avtale)}</dd>
         <dt>Booking</dt><dd>${esc(h.booking)}</dd>
       </dl>
       <p class="hotell-lenker">
         ${h.nettside ? `<a href="${esc(h.nettside)}" target="_blank" rel="noopener">Nettside ↗</a>` : ""}
         ${h.kart ? `<a href="${esc(kartSok(h.kart))}" target="_blank" rel="noopener">Vis i kart ↗</a>` : ""}
       </p>
-    </li>`).join("")}
-  </ul>`;
+    </li>`;
+const hotellGruppe = (tittel, liste) => liste.length ? `
+  <h4 class="hotell-gruppe">${esc(tittel)}</h4>
+  <ul class="hotell-liste">${liste.map(hotellKort).join("")}
+  </ul>` : "";
+const hotellHtml = () =>
+  hotellGruppe("Hoteller med avtale", C.hoteller.filter(h => h.avtaleOmrade)) +
+  hotellGruppe("Andre hoteller", C.hoteller.filter(h => !h.avtaleOmrade));
 
 $("#bolker").innerHTML = C.praktisk.map(b => `
   <details class="bolk"${b.id ? ` id="bolk-${esc(b.id)}"` : ""}>

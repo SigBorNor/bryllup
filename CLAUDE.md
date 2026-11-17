@@ -13,7 +13,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
   - `C.info` har infotekstene (dresscode, overnatting, taler, gaver, brunsj). Hver tekst vises flere steder: under tidslinjen, i Praktisk info og i påmeldingen. Den skal bare skrives ett sted.
   - `C.praktisk` er de fire bolkene i Praktisk info. `tekstFra: "reise"` gjør at bolken «Reise til området» viser samme tekst som infoknappen «Reise til Humlebæk» (`C.info.reise`).
   - `C.dageneForHotell` er teksten i den grønne boksen til høyre for introen i «Dagene før».
-  - `C.hoteller` er hotellene i bolken «Hoteller og rabattordning» (pitch, avtale, booking, nettside, kartsøk). Knappen under «Dagene før» åpner den bolken (`data-bolk="hoteller"`).
+  - `C.hoteller` er hotellene i bolken «Hoteller og rabattordning» (pitch, avtale, booking, nettside, kartsøk). `avtaleOmrade: true` legger hotellet under «Hoteller med avtale» øverst. De andre vises under «Andre hoteller». Knappen under «Dagene før» åpner den bolken (`data-bolk="hoteller"`).
   - `C.tips` er tipsene som åpnes fra fredagen og fra Praktisk info. `bilde: null` gir kort uten bilde.
   - Tekstfelt tåler både én streng og en liste med avsnitt.
 - **Farger og fonter:** `:root` øverst i `style.css`.
@@ -45,7 +45,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 
 ## Åpne punkter
 - [ ] Tekster som er plassholdere: dresscode, taler (toastmaster og kontakt), gaver, reise (`C.info.reise`)
-- [ ] Hoteller (`C.hoteller`): avtalene med Comwell, Frihavnen, Villa Brinkly og Nybogaard er ikke bekreftet (per 14.11.2026). Oppdater `avtale` og `booking` med koder, priser og frister når svarene kommer
+- [ ] Hoteller (`C.hoteller`), per 17.11.2026: Comwell Portside bekreftet med 15 rom, bookingkode kommer. Tilbud på Comwell Borupgaard er bedt om. Frihavnen: gjestene booker på e-post (bookingkode kun ved stor interesse). Nybogaard: ingen avtale, gjestene booker selv på nett. Villa Brinkly har ikke svart på spørsmål sendt 14.11
 - [ ] Bilder til tipsene (`C.tips.liste[].bilde`) og lenke til Strava-ruter
 - [ ] Håndskriftfont (`fonts/HAD-Script.woff2`) og delingsbilde (`media/deling.jpg`)
 - [ ] Tid og sted for torsdag

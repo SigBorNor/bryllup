@@ -223,6 +223,9 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .bred-bolk > p{max-width:42rem}
 
 /* Hoteller: to kolonner på store skjermer, tynn strek mellom */
+.hotell-gruppe{margin:2.25rem 0 0;font-size:.8125rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hotell-gruppe:first-of-type{margin-top:1.5rem}
+.hotell-gruppe + .hotell-liste{margin-top:.5rem}
 .hotell-liste{list-style:none;margin:1.25rem 0 0;padding:0;display:grid;column-gap:3.5rem}
 @media (min-width:48rem){.hotell-liste{grid-template-columns:1fr 1fr}}
 .hotell{padding:1.5rem 0;border-top:1px solid var(--tynn);font-size:.9375rem;line-height:1.65}
