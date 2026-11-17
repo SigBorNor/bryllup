@@ -326,7 +326,7 @@ const C = {
         <p class="ingress" id="forIntro"></p>
         <aside class="for-hotell" aria-label="Overnatting dagene før">
           <p id="forHotell"></p>
-          <button type="button" class="info-knapp" data-bolk="overnatting" data-vis-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
+          <button type="button" class="info-knapp" data-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
         </aside>
       </div>
       <div class="for-grid" id="forDager"></div>
@@ -447,6 +447,14 @@ const C = {
   </div>
 </dialog>
 
+<dialog id="hotellDlg" class="dlg-bred" aria-labelledby="hotellTittel">
+  <div class="dlg-top">
+    <h2 id="hotellTittel">Hoteller og rabattordning</h2>
+    <button type="button" class="textlink" data-lukk>Lukk</button>
+  </div>
+  <div class="dlg" id="hotellInnhold"></div>
+</dialog>
+
 <script>
 const $ = (s, el = document) => el.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -558,7 +566,11 @@ const hotellGruppe = (tittel, liste) => liste.length ? `
 const hotellHtml = () =>
   hotellGruppe("Hoteller med avtale", C.hoteller.filter(h => h.avtaleOmrade)) +
   hotellGruppe("Andre hoteller", C.hoteller.filter(h => !h.avtaleOmrade));
-const overnattingHtml = b => `
+const overnattingHtml = b => {
+  $("#hotellInnhold").innerHTML = `<p class="ingress">${liste(b.hotellTekst).map(esc).join(" ")}</p>${hotellHtml()}`;
+  return overnattingInnhold(b);
+};
+const overnattingInnhold = b => `
   <div class="overnatting-grid">
     <div class="overnatting-del">
       <h4>Bryllupet</h4>
@@ -568,12 +580,8 @@ const overnattingHtml = b => `
     <div class="overnatting-del">
       <h4>Dagene rundt</h4>
       ${avsnitt(C.dageneForHotell)}
-      <p class="knapp-linje"><button type="button" class="info-knapp" id="hotellKnapp" aria-expanded="false" aria-controls="hotellOversikt"><span>Se hoteller og rabattordning</span> <span aria-hidden="true">→</span></button></p>
+      <p class="knapp-linje"><button type="button" class="info-knapp" data-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button></p>
     </div>
-  </div>
-  <div class="hotell-oversikt" id="hotellOversikt" hidden>
-    ${avsnitt(b.hotellTekst)}
-    ${hotellHtml()}
   </div>`;
 
 $("#bolker").innerHTML = C.praktisk.map(b => `
@@ -604,24 +612,14 @@ function visInfo(k) {
   $("#infoTekst").innerHTML = infoHtml(k);
   $("#infoDlg").showModal();
 }
-// Viser eller skjuler hotelloversikten under «Overnatting»
-function visHoteller(vis) {
-  $("#hotellOversikt").hidden = !vis;
-  $("#hotellKnapp").setAttribute("aria-expanded", vis);
-  $("#hotellKnapp span").textContent = vis ? "Skjul hotellene" : "Se hoteller og rabattordning";
-}
 document.addEventListener("click", e => {
   const info = e.target.closest("[data-info]");
   if (info) { e.preventDefault(); visInfo(info.dataset.info); return; }
   if (e.target.closest("[data-tips]")) { e.preventDefault(); $("#tipsDlg").showModal(); $("#tipsDlg").scrollTop = 0; return; }
   // Knapp som åpner en bolk i «Praktisk info» og ruller dit
   const tilBolk = e.target.closest("[data-bolk]");
-  if (tilBolk) {
-    const b = $("#bolk-" + tilBolk.dataset.bolk);
-    if (b) { b.open = true; if ("visHoteller" in tilBolk.dataset) { visHoteller(true); rull($("#hotellOversikt")); } else rull(b); }
-    return;
-  }
-  if (e.target.closest("#hotellKnapp")) { visHoteller($("#hotellOversikt").hidden); return; }
+  if (tilBolk) { const b = $("#bolk-" + tilBolk.dataset.bolk); if (b) { b.open = true; rull(b); } return; }
+  if (e.target.closest("[data-hoteller]")) { $("#hotellDlg").showModal(); $("#hotellDlg").scrollTop = 0; return; }
   const lukk = e.target.closest("[data-lukk]");
   if (lukk) lukk.closest("dialog").close();
 });

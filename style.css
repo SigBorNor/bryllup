@@ -190,6 +190,13 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .for-topp .ingress{margin-bottom:0}
 @media (min-width:56rem){.for-topp{grid-template-columns:minmax(0,38rem) minmax(16rem,22rem);justify-content:space-between}}
 .for-grid{display:grid}
+/* Mobil: boksen om overnatting flyttes under torsdag og fredag */
+@media (max-width:55.99rem){
+  #dagene-for{display:flex;flex-direction:column}
+  #dagene-for .for-topp{display:contents}
+  #dagene-for .for-topp .ingress{margin-bottom:2.25rem}
+  #dagene-for .for-hotell{order:1;margin-top:2rem}
+}
 .for-dag{padding:0 0 1.75rem}
 .for-dag + .for-dag{border-top:1px solid var(--linje);padding:1.75rem 0 0}
 @media (min-width:48rem){
@@ -228,9 +235,8 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .overnatting-del{font-size:.9375rem;line-height:1.65}
 .overnatting-del h4{font-size:1rem;margin-bottom:.35rem}
 .overnatting-del .knapp-linje{margin-top:1rem}
-.hotell-oversikt{margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid var(--linje)}
 .hotell-gruppe{margin:2.25rem 0 0;font-size:.8125rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.hotell-oversikt > .hotell-gruppe:first-of-type{margin-top:1.5rem}
+#hotellInnhold > .hotell-gruppe:first-of-type{margin-top:0}
 .hotell-gruppe + .hotell-liste{margin-top:.5rem}
 .hotell-liste{list-style:none;margin:1.25rem 0 0;padding:0;display:grid;column-gap:3.5rem}
 @media (min-width:48rem){.hotell-liste{grid-template-columns:1fr 1fr}}
