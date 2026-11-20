@@ -15,7 +15,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
   - `C.dageneForHotell` er teksten i den grønne boksen til høyre for introen i «Dagene før». Den samme teksten står i kolonnen «Dagene rundt» under «Overnatting» i Praktisk info.
   - Bolken «Overnatting» i Praktisk info har to kolonner: «Bryllupet» (lør–søn, viser `C.info.overnatting`) og «Dagene rundt» (`C.dageneForHotell`). Knappen der åpner hotelloversikten som en overliggende visning (`#hotellDlg`, med `C.hoteller` og `hotellTekst` som innledning). Alle knapper med `data-hoteller` åpner den.
   - `C.hoteller` er hotellene i bolken «Hoteller og rabattordning» (pitch, avtale, booking, nettside, kartsøk). `avtaleOmrade: true` legger hotellet under «Hoteller med avtale» øverst. De andre vises under «Andre hoteller». Knappen i den grønne boksen under «Dagene før» åpner den samme overliggende visningen.
-  - `C.tips` er tipsene som åpnes fra fredagen og fra Praktisk info. `bilde: null` gir kort uten bilde.
+  - `C.tips` er tipsene som åpnes fra fredagen og fra Praktisk info. `bilde: null` gir kort uten bilde. Ett tips kan ha én lenke (`lenke`, `lenkeTekst`) eller flere (`lenker: [{ lenke, lenkeTekst }]`).
   - Tekstfelt tåler både én streng og en liste med avsnitt.
 - **Farger og fonter:** `:root` øverst i `style.css`.
 - **Innstillinger:** `config.js` (kode, `scriptUrl`, `maksPersoner`, `paameldingApen`).
@@ -47,7 +47,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 ## Åpne punkter
 - [ ] Tekster som er plassholdere: taler (toastmaster og kontakt), gaver
 - [ ] Hoteller (`C.hoteller`), per 17.11.2026: Comwell Portside bekreftet med 15 rom, bookingkode kommer. Tilbud på Comwell Borupgaard er bedt om. Frihavnen: gjestene booker på e-post (bookingkode kun ved stor interesse). Nybogaard: ingen avtale, gjestene booker selv på nett. Villa Brinkly har ikke svart på spørsmål sendt 14.11
-- [ ] Bilder til tipsene (`C.tips.liste[].bilde`) og lenke til Strava-ruter
+- [ ] Bilder til tipsene (`C.tips.liste[].bilde`)
 - [ ] Håndskriftfont (`fonts/HAD-Script.woff2`) og delingsbilde (`media/deling.jpg`)
 - [ ] Tid og sted for torsdag
 - [ ] Kart: punktene ligger i Google My Maps (`C.kart.mid`). Vielsesstedet mangler også koordinater i listen under kartet (`C.kart.steder`)

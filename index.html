@@ -98,7 +98,10 @@ const C = {
         lenke: "https://louisiana.dk/", lenkeTekst: "louisiana.dk", bilde: null },
       { navn: "Sykkelturer i skogene",
         tekst: "Fine grus- og skogsveier i alle retninger fra Humlebæk. Sjekk Sigve og Arnt sin Strava for ruter.",
-        lenke: null, lenkeTekst: "", bilde: null },
+        lenker: [
+          { lenke: "https://www.strava.com/athletes/79663051", lenkeTekst: "Sigve på Strava" },
+          { lenke: "https://www.strava.com/athletes/14148046", lenkeTekst: "Arnt på Strava" }
+        ], bilde: null },
       { navn: "Fredensborg Slot",
         tekst: "Kongefamiliens slott ved Esrum Sø, med en stor slottshage som er åpen for alle.",
         lenke: "https://kongeligeslotte.dk/en/palaces-and-gardens/fredensborg-palace-and-palace-gardens/visit-us.html", lenkeTekst: "kongeligeslotte.dk", bilde: null },
@@ -602,7 +605,7 @@ $("#tipsListe").innerHTML = C.tips.liste.map(t => `
     ${t.bilde ? `<img src="${esc(t.bilde)}" alt="" loading="lazy">` : ""}
     <h3>${esc(t.navn)}</h3>
     ${avsnitt(t.tekst)}
-    ${t.lenke ? `<p><a href="${esc(t.lenke)}" target="_blank" rel="noopener">${esc(t.lenkeTekst || "Les mer")} ↗</a></p>` : ""}
+    ${[...(t.lenke ? [t] : []), ...liste(t.lenker)].map(l => `<p><a href="${esc(l.lenke)}" target="_blank" rel="noopener">${esc(l.lenkeTekst || "Les mer")} ↗</a></p>`).join("")}
   </li>`).join("");
 
 /* ============ Infobokser og tips ============ */
