@@ -60,7 +60,7 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
    Fargen følger teksten rundt (currentColor). Størrelsen settes med width der det brukes. */
 .navnetrekk{display:block;width:12rem;max-width:100%;height:auto;aspect-ratio:630/138;fill:currentColor;overflow:visible}
 .hero .names{margin:1.1rem 0 .5rem;filter:drop-shadow(0 1px 10px rgba(20,30,40,.4))}
-.hero .names .navnetrekk{width:clamp(18rem,82vw,44rem);margin:0 auto}
+.hero .names .navnetrekk{width:clamp(18rem,82vw,34rem);margin:0 auto}
 .hero .date{font:400 clamp(1.25rem,4vw,1.9rem)/1.2 var(--f-serif);letter-spacing:.12em;margin:.6rem 0 0}
 .hero h1,.hero .date{text-shadow:0 1px 16px rgba(20,30,40,.35)}
 .gate{margin-top:2.5rem;width:100%;max-width:17rem;display:grid;gap:.6rem}
