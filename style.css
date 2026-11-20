@@ -138,12 +138,17 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .om-bilde.liggende{max-width:28rem}
 @media (min-width:56rem){
   .om-rad-1{grid-template-columns:1fr 24rem;gap:3.5rem}
-  .om-rad-2{grid-template-columns:20rem 1fr;gap:3.5rem}
+  /* Rad 2: Svalbard-bildet og tekst, under det invitasjonsblokken og terrasse-bildet */
+  .om-rad-2{grid-template-columns:21rem 1fr;gap:2.75rem 3.5rem}
+  .om-rad-2 .svar{margin-top:0;padding-top:0;border-top:0}
+  .om-bilde-borg{justify-self:end}
   .om-rad + .om-rad{margin-top:2rem}
 }
 @media (max-width:55.99rem){.om-rad-1 .om-bilde{order:-1}}
 .om-bilde img{width:100%;aspect-ratio:1/1;object-fit:cover}
 .om-bilde.liggende img{aspect-ratio:4/3;object-position:30% 50%}
+.om-bilde-borg{max-width:28rem}
+.om-bilde-borg img{aspect-ratio:4/3}
 .om-tekst p{opacity:0;transform:translateY(10px);transition:opacity .8s ease,transform .8s ease}
 .om-tekst.vis p{opacity:1;transform:none}
 .om-tekst.vis p:nth-child(2){transition-delay:.15s}

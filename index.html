@@ -320,21 +320,23 @@ const C = {
         <figure class="om-bilde"><img src="media/oss-svalbard.jpg" alt="Sofie og Sigve på dekk med snødekte fjell og hav i bakgrunnen" width="1400" height="1311" loading="lazy"></figure>
         <div class="om-innhold">
           <div class="om-tekst" id="omTekst"></div>
-          <!-- PC: samme invitasjonsblokk som øverst på mobil (C.kortFortalt). Skjult på mobil. -->
-          <div class="svar invitasjon" id="svar">
-            <p class="kf-tittel" data-kf="tittel"></p>
-            <p class="kf-dato" data-kf="dato"></p>
-            <p class="kf-sted" data-kf="sted"></p>
-            <p class="kf-frist">Svar innen <span data-kf="frist"></span></p>
-            <button class="btn" id="aapne">Svar på invitasjonen</button>
-            <p class="kf-kal"><button class="textlink" id="fristKal" aria-expanded="false" aria-controls="fristValg">+ Legg bryllupet i kalenderen</button></p>
-            <div class="kalvalg" id="fristValg" hidden>
-              <a class="ghostbtn" id="fristGoogle" target="_blank" rel="noopener">Google Kalender ↗</a>
-              <button class="ghostbtn" id="fristIcs">Apple / Outlook</button>
-            </div>
-            <p class="done" id="pameldt" hidden>✓ Du har sendt svar fra denne enheten.</p>
-          </div>
         </div>
+        <!-- PC: samme invitasjonsblokk som øverst på mobil (C.kortFortalt). Skjult på mobil. -->
+        <div class="svar invitasjon" id="svar">
+          <p class="kf-tittel" data-kf="tittel"></p>
+          <p class="kf-dato" data-kf="dato"></p>
+          <p class="kf-sted" data-kf="sted"></p>
+          <p class="kf-frist">Svar innen <span data-kf="frist"></span></p>
+          <button class="btn" id="aapne">Svar på invitasjonen</button>
+          <p class="kf-kal"><button class="textlink" id="fristKal" aria-expanded="false" aria-controls="fristValg">+ Legg bryllupet i kalenderen</button></p>
+          <div class="kalvalg" id="fristValg" hidden>
+            <a class="ghostbtn" id="fristGoogle" target="_blank" rel="noopener">Google Kalender ↗</a>
+            <button class="ghostbtn" id="fristIcs">Apple / Outlook</button>
+          </div>
+          <p class="done" id="pameldt" hidden>✓ Du har sendt svar fra denne enheten.</p>
+        </div>
+        <!-- PC: bilde til høyre for invitasjonsblokken. Skjult på mobil. -->
+        <figure class="om-bilde om-bilde-borg kun-pc"><img src="media/sommer-terrasse-borg.jpg" alt="Sofie og Sigve på en terrasse med en borg i bakgrunnen" width="1082" height="726" loading="lazy"></figure>
       </div>
     </section>
 
@@ -765,7 +767,7 @@ $("#kfIcs").onclick = () => lastNedIcs([bryllupHendelse], "bryllup-sofie-sigve.i
 (function () {
   const ul = $("#karusell");
   // Bilder som allerede vises andre steder på siden. På mobil viser karusellen bare de andre.
-  const brukt = new Set([...document.querySelectorAll("main img")].map(i => i.getAttribute("src").replace("media/", "")));
+  const brukt = new Set([...document.querySelectorAll("main img:not(.kun-pc img)")].map(i => i.getAttribute("src").replace("media/", "")));
   ul.innerHTML = C.bilder.map(b => `
     <li${brukt.has(b.fil) ? ' class="brukt"' : ""}><img src="media/${esc(b.fil)}" alt="${esc(b.alt)}" width="${b.b}" height="${b.h}" style="aspect-ratio:${b.b}/${b.h}" loading="lazy"></li>`).join("");
   const bla = retning => ul.scrollBy({ left: retning * ul.clientWidth * 0.8, behavior: redusert ? "auto" : "smooth" });
