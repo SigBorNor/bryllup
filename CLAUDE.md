@@ -28,10 +28,11 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 - **Bilder:** `media/`. Videoen ligger i `media/hav.mp4` (under ca. 8 MB, spilles uten lyd). Den er bearbeidet: sakket ned til 60 % med beregnede mellombilder, beskåret 10 % på siden med lyst gjenskinn (toppen av filen, venstre side når den vises rotert på PC), og slutten toner over i starten så sløyfen ikke har noe hopp. Filen er 720 × 1152. `media/hav.jpg` er første bilde i videoen og vises mens den lastes. Byttes videoen, må begge lages på nytt.
 - **Bilder lastes opp uten posisjonsdata.** Bilder fra mobilen har ofte GPS-posisjon i filen, og repoet er offentlig. Fjern EXIF og skaler ned til maks ca. 1600 piksler før de legges i `media/`.
 - **Bilder i `media/`** er navngitt etter motiv. Plassering på siden: `hoddevik-surf-strand` (rad 1, til høyre for teksten) og `oss-svalbard` (rad 2, til venstre) i Om oss, `solnedgang-strand-selfie` på takkesiden etter ja-svar, tre bilder på rad mellom Bryllupsdagen og Dagene før (`forlovelse-klem-genser`, `paris-seinen-eiffel`, `ski-topptur-selfie`) og tre mellom Dagene før og Kart (`vinter-akebrett`, `surf-paa-vei-ut`, `fest-dress-og-kjole`). Alle bildene ligger i karusellen (`C.bilder`, rekkefølgen der er rekkefølgen på siden). `story-nye-nokler` er et skjermbilde av en Instagram-story, og `surf.jpg` har en hvit kant til venstre. `forlovelse-ring-latter` er fjernet fra siden og repoet etter ønske fra Sigve.
-- **Håndskriftfont:** `fonts/HAD-Script.woff2`. Reservefont er Caveat.
+- **Navnetrekket:** `media/sofie-sigve.svg` er det håndtegnede «Sofie ♡ Sigve», gjort om til vektorgrafikk (skarpt i alle størrelser). Det settes inn med `<span class="navnetrekk" role="img" aria-label="Sofie og Sigve"></span>` og brukes som CSS-maske, så det får fargen til teksten rundt. Størrelsen settes med `width`. Brukes på forsiden, i bunnteksten og i topplinjen på mobil.
+- **Håndskriftfont:** `fonts/HAD-Script.woff2`. Reservefont er Caveat. Brukes nå bare i «Tusen takk!».
 
 ## Beslutninger som er tatt (ikke endre uten å avklare med Sigve og Sofie)
-- Forside: fullskjermsvideo av vann med «Bryllupsinvitasjon / Sofie og Sigve / 17.07.2027» i Fraunces, og kodefelt. Videoen er filmet i høydeformat og roteres −90 grader på liggende skjermer (`style.css`), så mer av bildet vises.
+- Forside: fullskjermsvideo av vann med «Bryllupsinvitasjon» og «17.07.2027» i Fraunces med det håndtegnede navnetrekket mellom, og kodefelt. Videoen er filmet i høydeformat og roteres −90 grader på liggende skjermer (`style.css`), så mer av bildet vises.
 - Sideoppbygning etter koden: Om oss (historien delt i to: første del med bilde til høyre, andre del med bilde til venstre og svarknapp og «+ Legg i kalender» under) → Bryllupsdagen (tekst, bilde, tidslinje, fem infoknapper inkludert «Reise til Humlebæk») → tre bilder → Dagene før (intro med grønn boks om overnatting til høyre på PC og under torsdag og fredag på mobil, torsdag og fredag skilt med en strek) → tre bilder → Kart (Google My Maps, innebygd) → Bilder (karusell) → Praktisk info nederst (fire bolker som åpnes ved klikk: På selve dagen, Overnatting, Reise til området, Ting å gjøre i området). Innholdsfortegnelse: sidemeny til venstre på store skjermer, knappen «Innhold» oppe til høyre på nettbrett, og i topplinjen på mobil. Begge bygges fra `data-toc`.
 - Alle ser «Dagene før». Bryteren som skjulte torsdag og fredag er fjernet.
 - Flytende svarknapp vises på PC og nettbrett når den vanlige knappen ikke er på skjermen. På mobil ligger svarknappen i topplinjen.
@@ -40,7 +41,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 - Betaling: Vipps eller MobilePay til Sigve.
 - Bare norsk.
 - Kalender: Google Kalender (én lenke per dag) eller Apple/Outlook (.ics).
-- Design: Fraunces (serif), versaloverskrifter uten strek under, sandfarget side, lyseblå knapper, grønne infobokser i skjemaet. Håndskrift brukes bare i «Tusen takk!» og i bunnteksten.
+- Design: Fraunces (serif), versaloverskrifter uten strek under, sandfarget side, lyseblå knapper, grønne infobokser i skjemaet. Det håndtegnede navnetrekket brukes på forsiden, i bunnteksten og i topplinjen på mobil. Håndskriftfonten brukes bare i «Tusen takk!».
 
 ## Regler
 - **Ikke endre kolonnerekkefølgen** i `apps-script.gs` (`KOLONNER`). Nye kolonner legges til sist, og formlene i `oppsett()` må oppdateres.

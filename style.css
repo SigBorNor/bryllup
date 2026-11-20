@@ -56,9 +56,14 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .hero::after{content:"";position:absolute;inset:0;background:rgba(30,40,48,.18)}
 .hero-inner{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.75rem;color:var(--script)}
 .hero h1{font:400 clamp(1.05rem,3.6vw,1.5rem)/1.2 var(--f-serif);letter-spacing:.22em;text-transform:uppercase;margin:0}
-.hero .names{font:400 clamp(2.6rem,9.5vw,5rem)/1.1 var(--f-serif);margin:.35em 0 0}
+/* Navnetrekket: håndtegnet «Sofie ♡ Sigve» (media/sofie-sigve.svg). Vektorgrafikk, så det er skarpt i alle størrelser.
+   Det brukes som maske, så fargen følger teksten rundt (currentColor). Størrelsen settes med width der det brukes. */
+.navnetrekk{display:block;width:12rem;max-width:100%;aspect-ratio:727/145;background:currentColor;
+  -webkit-mask:url("media/sofie-sigve.svg") center/contain no-repeat;mask:url("media/sofie-sigve.svg") center/contain no-repeat}
+.hero .names{margin:1.1rem 0 .5rem;filter:drop-shadow(0 1px 10px rgba(20,30,40,.4))}
+.hero .names .navnetrekk{width:clamp(17rem,62vw,36rem);margin:0 auto}
 .hero .date{font:400 clamp(1.25rem,4vw,1.9rem)/1.2 var(--f-serif);letter-spacing:.12em;margin:.6rem 0 0}
-.hero h1,.hero .names,.hero .date{text-shadow:0 1px 16px rgba(20,30,40,.35)}
+.hero h1,.hero .date{text-shadow:0 1px 16px rgba(20,30,40,.35)}
 .gate{margin-top:2.5rem;width:100%;max-width:17rem;display:grid;gap:.6rem}
 .gate label{font-size:.9rem;text-shadow:0 1px 10px rgba(20,30,40,.5)}
 .gate input{text-align:center;letter-spacing:.2em;font:400 1.1rem var(--f-serif);color:var(--ink);background:rgba(244,241,236,.94);border:1px solid var(--linje);padding:.75rem}
@@ -281,7 +286,8 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .dot{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--linje);margin-top:.45rem}
 
 .fot{padding:2rem 0 4.5rem;text-align:center}
-.fot p{font:400 2.2rem/1 var(--f-script);color:var(--muted)}
+.fot p{color:var(--muted);margin:0}
+.fot .navnetrekk{width:13rem;margin:0 auto}
 
 /* Flytende svarknapp: vises når den vanlige knappen ikke er på skjermen */
 .floating{position:fixed;right:1.25rem;bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));margin:0;z-index:20;box-shadow:0 6px 18px rgba(60,50,52,.18)}
@@ -396,7 +402,8 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
   #tocKnapp,#flyt{display:none!important}
   .mobilbar:not([hidden]){display:flex;align-items:center;gap:.5rem;position:fixed;top:0;left:0;right:0;z-index:31;
     padding:calc(.45rem + env(safe-area-inset-top,0px)) .75rem .45rem 1.25rem;background:var(--papir);border-bottom:1px solid var(--linje)}
-  .mb-navn{margin-right:auto;font-size:1rem;letter-spacing:.04em}
+  .mb-navn{margin-right:auto}
+  .mb-navn .navnetrekk{width:7.75rem}
   .mb-innhold{background:none;border:1px solid var(--linje);border-radius:0;color:var(--ink);font:400 .75rem/1 var(--f-serif);letter-spacing:.09em;text-transform:uppercase;padding:.65rem .7rem;cursor:pointer}
   .mb-svar{font-size:.875rem;padding:.6rem .9rem}
   .toc{top:calc(3.5rem + env(safe-area-inset-top,0px))}
