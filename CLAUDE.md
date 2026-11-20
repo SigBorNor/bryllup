@@ -45,7 +45,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 - Ikke legg hemmeligheter i repoet. Det er offentlig.
 
 ## Åpne punkter
-- [ ] Tekster som er plassholdere: dresscode, taler (toastmaster og kontakt), gaver, reise (`C.info.reise`)
+- [ ] Tekster som er plassholdere: taler (toastmaster og kontakt), gaver
 - [ ] Hoteller (`C.hoteller`), per 17.11.2026: Comwell Portside bekreftet med 15 rom, bookingkode kommer. Tilbud på Comwell Borupgaard er bedt om. Frihavnen: gjestene booker på e-post (bookingkode kun ved stor interesse). Nybogaard: ingen avtale, gjestene booker selv på nett. Villa Brinkly har ikke svart på spørsmål sendt 14.11
 - [ ] Bilder til tipsene (`C.tips.liste[].bilde`) og lenke til Strava-ruter
 - [ ] Håndskriftfont (`fonts/HAD-Script.woff2`) og delingsbilde (`media/deling.jpg`)
