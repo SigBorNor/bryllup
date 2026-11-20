@@ -16,7 +16,6 @@
   --yellow:#E6E1BF;    /* kartramme */
   --green:#DDE1D3;     /* infobokser i skjemaet */
   --script:#F1E8B0;    /* håndskrift i toppen */
-  --gull-dus:#E3DBB5;  /* dusere utgave av --script: bakgrunn i invitasjonsboksen på mobil */
   --danger:#9C3D2E;
   --f-serif:"Fraunces",Georgia,"Times New Roman",serif;
   --f-script:"HAD Script","Caveat","Bradley Hand",cursive;
@@ -403,12 +402,8 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
   .toc{top:calc(3.5rem + env(safe-area-inset-top,0px))}
   .seksjon,.seksjon.om{scroll-margin-top:3.25rem}
 
-  /* «Vi inviterer deg til bryllup»: i stil med forsiden, gyllen bakgrunn, midtstilt */
-  .kort-fortalt{display:block;position:relative;background:var(--gull-dus);text-align:center;padding:1.6rem 1.5rem 1.4rem;margin:.9rem -1.5rem 3rem}
-  /* Bølgekanter oppe og nede, i stil med vannet på forsiden */
-  .kort-fortalt::before,.kort-fortalt::after{content:"";position:absolute;left:0;right:0;height:14px;background-repeat:repeat-x;background-size:160px 14px}
-  .kort-fortalt::before{top:-13px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 14'%3E%3Cpath d='M0 14V7Q20 0 40 7T80 7T120 7T160 7V14Z' fill='%23E3DBB5'/%3E%3C/svg%3E")}
-  .kort-fortalt::after{bottom:-13px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 14'%3E%3Cpath d='M0 0V7Q20 14 40 7T80 7T120 7T160 7V0Z' fill='%23E3DBB5'/%3E%3C/svg%3E");background-position:80px 0}
+  /* Invitasjonsboksen: i stil med forsiden, midtstilt, uten bakgrunn */
+  .kort-fortalt{display:block;text-align:center;padding:.5rem 0 0;margin:0 0 2.5rem}
   .kf-tittel{font-size:.9375rem;line-height:1.4;letter-spacing:.15em;text-transform:uppercase;margin:0 0 .9rem}
   .kf-dato{font-size:1.5rem;line-height:1.3;letter-spacing:.04em;margin:0}
   .kf-sted{margin:.2rem 0 0}

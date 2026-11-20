@@ -18,7 +18,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
   - `C.tips` er tipsene som åpnes fra fredagen og fra Praktisk info. `bilde: null` gir kort uten bilde. Ett tips kan ha én lenke (`lenke`, `lenkeTekst`) eller flere (`lenker: [{ lenke, lenkeTekst }]`).
   - Tekstfelt tåler både én streng og en liste med avsnitt.
 - **Mobilvisning (under 48rem):** egen blokk nederst i `style.css`. PC-visningen påvirkes ikke. `.kun-mobil` vises bare på mobil, `.kun-pc` bare på større skjermer. På mobil:
-  - Invitasjonsboksen øverst i Om oss (`C.kortFortalt`): full bredde, dus gyllen bakgrunn (`--gull-dus`) og bølgekanter oppe og nede (SVG i `::before`/`::after`, fargen står også i SVG-en), med svarfrist, svarknapp og «+ Legg bryllupet i kalenderen» (lørdagen fra `C.dager`). Svarknappen under historien (`#svar`) er skjult.
+  - Invitasjonsboksen øverst i Om oss (`C.kortFortalt`): midtstilt tekst uten bakgrunn (gyllen bakgrunn og bølgekanter er prøvd og tatt bort igjen), med svarfrist, svarknapp og «+ Legg bryllupet i kalenderen» (lørdagen fra `C.dager`). Svarknappen under historien (`#svar`) er skjult.
   - Kortere tekster: `C.bryllupsdagen.tekstMobil` og `C.dageneForIntroMobil`. Endres langteksten, bør kortteksten sjekkes også.
   - Tettere tidslinje, infoknappene i rutenett, bilderekkene som sveipbare striper, Krogerup-bildet i full bredde, lavere kart med én linje per sted.
   - Karusellen viser bare bilder som ikke allerede er på siden (klassen `brukt`).
