@@ -151,9 +151,14 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .om-tekst.vis p:nth-child(4){transition-delay:.45s}
 @media (prefers-reduced-motion:reduce){.om-tekst p{opacity:1;transform:none;transition:none}}
 
-.svar{margin-top:2.25rem;padding-top:1.75rem;border-top:1px solid var(--linje)}
-.frist{font-size:1rem;letter-spacing:.09em;text-transform:uppercase}
-.actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.75rem;margin-top:1.1rem}
+/* Invitasjonsblokken: under historien på PC (#svar), øverst på mobil (.kort-fortalt) */
+.svar{margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--linje);text-align:center}
+.invitasjon .kf-tittel{font-size:.9375rem;line-height:1.4;letter-spacing:.15em;text-transform:uppercase;margin:0 0 .9rem}
+.invitasjon .kf-dato{font-size:1.5rem;line-height:1.3;letter-spacing:.04em;margin:0}
+.invitasjon .kf-sted{margin:.2rem 0 0}
+.invitasjon .kf-frist{font-size:.9375rem;color:var(--muted);margin:.75rem 0 1rem}
+.invitasjon .kf-kal{margin:.9rem 0 0}
+.invitasjon .kalvalg{justify-content:center;margin-top:.75rem}
 .done{margin-top:1.25rem;font-size:.9375rem}
 .kalvalg{display:flex;flex-wrap:wrap;align-items:stretch;gap:.6rem;margin-top:1rem}
 .kalvalg > *{display:inline-flex;align-items:center}
@@ -410,13 +415,7 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
 
   /* Invitasjonsboksen: i stil med forsiden, midtstilt, uten bakgrunn */
   .kort-fortalt{display:block;text-align:center;padding:.5rem 0 0;margin:0 0 2.5rem}
-  .kf-tittel{font-size:.9375rem;line-height:1.4;letter-spacing:.15em;text-transform:uppercase;margin:0 0 .9rem}
-  .kf-dato{font-size:1.5rem;line-height:1.3;letter-spacing:.04em;margin:0}
-  .kf-sted{margin:.2rem 0 0}
-  .kf-frist{font-size:.9375rem;color:var(--muted);margin:.75rem 0 1rem}
   .kort-fortalt .btn{font-size:1rem;padding:.85rem 1.15rem}
-  .kf-kal{margin:.9rem 0 0}
-  .kort-fortalt .kalvalg{justify-content:center;margin-top:.75rem}
 
   /* Svarknappen under historien vises ikke på mobil (den ligger i boksen øverst) */
   #svar{display:none}

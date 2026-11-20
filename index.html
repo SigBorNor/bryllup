@@ -300,7 +300,7 @@ const C = {
     <!-- Om oss, med svarknappen under historien -->
     <section class="seksjon om" id="om-oss" data-toc="Om oss" aria-label="Om oss">
       <!-- Mobil: det viktigste først -->
-      <div class="kort-fortalt kun-mobil" aria-labelledby="kfTittel">
+      <div class="kort-fortalt invitasjon kun-mobil" aria-labelledby="kfTittel">
         <p class="kf-tittel" id="kfTittel"></p>
         <p class="kf-dato" id="kfDato"></p>
         <p class="kf-sted" id="kfSted"></p>
@@ -320,12 +320,14 @@ const C = {
         <figure class="om-bilde"><img src="media/oss-svalbard.jpg" alt="Sofie og Sigve på dekk med snødekte fjell og hav i bakgrunnen" width="1400" height="1311" loading="lazy"></figure>
         <div class="om-innhold">
           <div class="om-tekst" id="omTekst"></div>
-          <div class="svar" id="svar">
-            <p class="frist">Svar innen <span id="frist"></span></p>
-            <div class="actions">
-              <button class="btn" id="aapne">Svar på invitasjonen</button>
-              <button class="textlink" id="fristKal" aria-expanded="false" aria-controls="fristValg">+ Legg i kalender</button>
-            </div>
+          <!-- PC: samme invitasjonsblokk som øverst på mobil (C.kortFortalt). Skjult på mobil. -->
+          <div class="svar invitasjon" id="svar">
+            <p class="kf-tittel" data-kf="tittel"></p>
+            <p class="kf-dato" data-kf="dato"></p>
+            <p class="kf-sted" data-kf="sted"></p>
+            <p class="kf-frist">Svar innen <span data-kf="frist"></span></p>
+            <button class="btn" id="aapne">Svar på invitasjonen</button>
+            <p class="kf-kal"><button class="textlink" id="fristKal" aria-expanded="false" aria-controls="fristValg">+ Legg bryllupet i kalenderen</button></p>
             <div class="kalvalg" id="fristValg" hidden>
               <a class="ghostbtn" id="fristGoogle" target="_blank" rel="noopener">Google Kalender ↗</a>
               <button class="ghostbtn" id="fristIcs">Apple / Outlook</button>
@@ -565,6 +567,9 @@ $("#kfTittel").textContent = C.kortFortalt.tittel;
 $("#kfDato").textContent = C.kortFortalt.dato;
 $("#kfSted").textContent = C.kortFortalt.sted;
 $("#kfFrist").textContent = C.svarfrist.tekst;
+// Samme tekst i invitasjonsblokken under historien (PC)
+document.querySelectorAll("#svar [data-kf]").forEach(el =>
+  el.textContent = el.dataset.kf === "frist" ? C.svarfrist.tekst : C.kortFortalt[el.dataset.kf]);
 $("#tidslinje").innerHTML = C.tidslinje.map(p => `
   <li class="${p.dag ? "ny-dag" : ""}">
     ${p.dag ? `<span class="tl-dag">${esc(p.dag)}</span>` : ""}
@@ -722,23 +727,23 @@ function lastNedIcs(hendelser, filnavn) {
   const a = Object.assign(document.createElement("a"), { href: url, download: filnavn });
   document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
-$("#frist").textContent = C.svarfrist.tekst;
 function googleLenke(h) {
   const q = [["action", "TEMPLATE"], ["text", h.tittel], ["dates", `${h.dato}/${nesteDag(h.dato)}`],
     ["details", h.tekst || ""], ["location", h.sted || C.sted]];
   return "https://calendar.google.com/calendar/render?" + q.map(([k, v]) => `${k}=${k === "dates" ? v : encodeURIComponent(v)}`).join("&");
 }
-const fristHendelse = { id: "frist", dato: C.svarfrist.dato, tittel: "Svarfrist: bryllup Sofie & Sigve", tekst: "Meld deg på her: " + C.url };
-$("#fristGoogle").href = googleLenke(fristHendelse);
+
 $("#fristKal").onclick = () => {
   const v = $("#fristValg"); v.hidden = !v.hidden;
   $("#fristKal").setAttribute("aria-expanded", !v.hidden);
 };
-$("#fristIcs").onclick = () => lastNedIcs([fristHendelse], "svarfrist-sofie-sigve.ics");
+
 // Mobil: «Legg bryllupet i kalenderen» i boksen øverst (lørdagen fra C.dager)
 const lordag = C.dager.find(d => d.id === "lor");
 const bryllupHendelse = { id: "bryllup", dato: lordag.dato, tittel: lordag.kalender, tekst: flat(lordag.tekst) + " Mer info: " + C.url };
 $("#kfGoogle").href = googleLenke(bryllupHendelse);
+$("#fristGoogle").href = googleLenke(bryllupHendelse);
+$("#fristIcs").onclick = () => lastNedIcs([bryllupHendelse], "bryllup-sofie-sigve.ics");
 $("#kfKal").onclick = () => {
   const v = $("#kfKalValg"); v.hidden = !v.hidden;
   $("#kfKal").setAttribute("aria-expanded", !v.hidden);
