@@ -47,8 +47,13 @@ const C = {
       "Etter vielsen samles vi til feiring med middag, taler og fest med dans inn i natten.",
       "Etter festen på lørdag er det mulig å overnatte på Høyskolen til søndag, og søndag morgen serveres det brunsj på høyskolen som vi håper alle vil være med på.",
       "Vi gleder oss så mye til å ha dere alle med på denne store dagen!"
-    ]
+    ],
+    // Kortere tekst som vises på mobil i stedet for teksten over. Tidslinjen viser resten.
+    tekstMobil: "Lørdag 17. juli gifter vi oss i Humlebæk, og vi gleder oss til å feire med dere. Fra stranden til bøkeskogen og opp til Krogerup skal vi fylle gatene med dansk-norsk kjærlighet og danse inn i sommernatten som nygifte. Om været tillater det, blir vielsen på stranden, ellers i Humlebæk Kirke."
   },
+
+  // «Kort fortalt»-kortet øverst på mobil, over historien.
+  kortFortalt: { tittel: "Vi inviterer deg til bryllup", dato: "Lørdag 17. juli 2027", sted: "Krogerup Højskole, Humlebæk" },
 
   // Tidslinjen. «dag» settes på første punkt hver dag.
   tidslinje: [
@@ -62,6 +67,8 @@ const C = {
   // Knappene under tidslinjen. Navnene viser til «info» lenger ned.
   dagInfo: ["dresscode", "overnatting", "taler", "gaver", "reise"],
 
+  // Kortere intro som vises på mobil i stedet for teksten under.
+  dageneForIntroMobil: "Vi inviterer først og fremst til bryllup lørdag til søndag, men mange vil kanskje komme tidligere. Er dere i området, blir det en uformell sammenkomst torsdag ettermiddag. Fredag har vi ikke noe opplegg.",
   dageneForIntro: "Vi inviterer først og fremst til bryllup og bryllupsfest lørdag til søndag. Samtidig ser vi for oss at flere har lyst til å tilbringe litt mer tid rundt Humlebæk eller i København, og det synes vi er veldig hyggelig! For de som er i området vil vi invitere til en lavterskel sammenkomst på torsdag ettermiddag mens på fredag blir det ikke noe offisielt opplegg annet enn å nyte nærområdet og lade godt opp.",
 
   // Boksen til høyre for teksten over, og kolonnen «Dagene rundt» under «Overnatting» i Praktisk info. Knappen åpner hotelloversikten.
@@ -277,10 +284,29 @@ const C = {
 <div id="innhold" hidden>
   <button type="button" class="toc-knapp" id="tocKnapp" aria-expanded="false" aria-controls="toc" hidden><span aria-hidden="true">☰</span> Innhold</button>
   <nav class="toc skjult" id="toc" aria-label="Innhold"><ol></ol></nav>
+  <!-- Mobil: smal topplinje med navn, innhold og svarknapp (erstatter de flytende knappene) -->
+  <div class="mobilbar" id="mobilbar" hidden>
+    <span class="mb-navn">Sofie &amp; Sigve</span>
+    <button type="button" class="mb-innhold" id="mbInnhold" aria-expanded="false" aria-controls="toc"><span aria-hidden="true">☰</span> Innhold</button>
+    <button type="button" class="btn mb-svar" id="mbSvar">Svar</button>
+  </div>
 
   <main class="side">
     <!-- Om oss, med svarknappen under historien -->
     <section class="seksjon om" id="om-oss" data-toc="Om oss" aria-label="Om oss">
+      <!-- Mobil: det viktigste først -->
+      <div class="kort-fortalt kun-mobil" aria-labelledby="kfTittel">
+        <p class="kf-tittel" id="kfTittel"></p>
+        <p class="kf-dato" id="kfDato"></p>
+        <p class="kf-sted" id="kfSted"></p>
+        <p class="kf-frist">Svar innen <span id="kfFrist"></span></p>
+        <button class="btn" id="kfSvar">Svar på invitasjonen</button>
+        <p class="kf-kal"><button class="textlink" id="kfKal" aria-expanded="false" aria-controls="kfKalValg">+ Legg bryllupet i kalenderen</button></p>
+        <div class="kalvalg" id="kfKalValg" hidden>
+          <a class="ghostbtn" id="kfGoogle" target="_blank" rel="noopener">Google Kalender ↗</a>
+          <button class="ghostbtn" id="kfIcs">Apple / Outlook</button>
+        </div>
+      </div>
       <div class="om-rad om-rad-1">
         <div class="om-tekst" id="omTekst1"></div>
         <figure class="om-bilde liggende"><img src="media/hoddevik-surf-strand.jpg" alt="Sofie og Sigve i våtdrakt på stranden i Hoddevik, med surfebrett i sanden" width="1600" height="1066"></figure>
@@ -327,6 +353,7 @@ const C = {
       <h2 id="h-for">Dagene før <span class="h-dato">15.–16. juli</span></h2>
       <div class="for-topp">
         <p class="ingress" id="forIntro"></p>
+        <p class="ingress kun-mobil" id="forIntroMobil" hidden></p>
         <aside class="for-hotell" aria-label="Overnatting dagene før">
           <p id="forHotell"></p>
           <button type="button" class="info-knapp" data-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
@@ -525,7 +552,14 @@ $("#omTekst").innerHTML = avsnitt(C.intro.slice(introDel));
 document.querySelectorAll(".om-tekst").forEach(el =>
   new IntersectionObserver(([e], obs) => { if (e.isIntersecting) { e.target.classList.add("vis"); obs.disconnect(); } }, { threshold: 0.15 }).observe(el));
 $("#dagDato").textContent = C.bryllupsdagen.dato;
-$("#dagTekst").innerHTML = avsnitt(C.bryllupsdagen.tekst);
+// På mobil vises den korte teksten (tekstMobil) hvis den finnes
+const mobilTekst = (full, kort) => kort
+  ? `<div class="kun-pc">${avsnitt(full)}</div><div class="kun-mobil">${avsnitt(kort)}</div>` : avsnitt(full);
+$("#dagTekst").innerHTML = mobilTekst(C.bryllupsdagen.tekst, C.bryllupsdagen.tekstMobil);
+$("#kfTittel").textContent = C.kortFortalt.tittel;
+$("#kfDato").textContent = C.kortFortalt.dato;
+$("#kfSted").textContent = C.kortFortalt.sted;
+$("#kfFrist").textContent = C.svarfrist.tekst;
 $("#tidslinje").innerHTML = C.tidslinje.map(p => `
   <li class="${p.dag ? "ny-dag" : ""}">
     ${p.dag ? `<span class="tl-dag">${esc(p.dag)}</span>` : ""}
@@ -537,6 +571,11 @@ $("#dagInfo").innerHTML = C.dagInfo.map(k =>
   `<button type="button" class="info-knapp" data-info="${esc(k)}">${iMerke}${esc(C.info[k].tittel)}</button>`).join("");
 
 $("#forIntro").textContent = C.dageneForIntro;
+if (C.dageneForIntroMobil) {
+  $("#forIntroMobil").textContent = C.dageneForIntroMobil;
+  $("#forIntroMobil").hidden = false;
+  $("#forIntro").classList.add("kun-pc");
+}
 $("#forHotell").textContent = C.dageneForHotell;
 $("#forDager").innerHTML = C.dager.filter(d => d.torfre).map(d => `
   <article class="for-dag">
@@ -638,7 +677,9 @@ const tocLenker = [...toc.querySelectorAll("a")];
 const tocKnapp = $("#tocKnapp");
 const lukkToc = () => { toc.classList.remove("aapen"); tocKnapp.setAttribute("aria-expanded", "false"); };
 tocKnapp.onclick = () => tocKnapp.setAttribute("aria-expanded", toc.classList.toggle("aapen"));
-document.addEventListener("click", e => { if (!e.target.closest("#toc, #tocKnapp")) lukkToc(); });
+const mbInnhold = $("#mbInnhold"), mobilbar = $("#mobilbar");
+mbInnhold.onclick = () => { const aapen = toc.classList.toggle("aapen"); tocKnapp.setAttribute("aria-expanded", aapen); mbInnhold.setAttribute("aria-expanded", aapen); };
+document.addEventListener("click", e => { if (!e.target.closest("#toc, #tocKnapp, #mbInnhold")) { lukkToc(); mbInnhold.setAttribute("aria-expanded", "false"); } });
 document.addEventListener("keydown", e => { if (e.key === "Escape") lukkToc(); });
 tocLenker.forEach((a, i) => a.addEventListener("click", e => { e.preventDefault(); lukkToc(); rull(tocSeksjoner[i]); }));
 let knappSynlig = true;
@@ -650,6 +691,7 @@ function oppdaterToc() {
   const iToppen = $("#topp").getBoundingClientRect().bottom > innerHeight * 0.5;
   toc.classList.toggle("skjult", iToppen);
   tocKnapp.hidden = iToppen;
+  mobilbar.hidden = iToppen;
   if (iToppen) lukkToc();
   // Flytende svarknapp: vises når den vanlige knappen ikke er på skjermen
   flyt.hidden = !APEN || knappSynlig || iToppen;
@@ -688,6 +730,15 @@ $("#fristKal").onclick = () => {
   $("#fristKal").setAttribute("aria-expanded", !v.hidden);
 };
 $("#fristIcs").onclick = () => lastNedIcs([fristHendelse], "svarfrist-sofie-sigve.ics");
+// Mobil: «Legg bryllupet i kalenderen» i boksen øverst (lørdagen fra C.dager)
+const lordag = C.dager.find(d => d.id === "lor");
+const bryllupHendelse = { id: "bryllup", dato: lordag.dato, tittel: lordag.kalender, tekst: flat(lordag.tekst) + " Mer info: " + C.url };
+$("#kfGoogle").href = googleLenke(bryllupHendelse);
+$("#kfKal").onclick = () => {
+  const v = $("#kfKalValg"); v.hidden = !v.hidden;
+  $("#kfKal").setAttribute("aria-expanded", !v.hidden);
+};
+$("#kfIcs").onclick = () => lastNedIcs([bryllupHendelse], "bryllup-sofie-sigve.ics");
 
 /* ============ Kart ============ */
 (function () {
@@ -696,15 +747,17 @@ $("#fristIcs").onclick = () => lastNedIcs([fristHendelse], "svarfrist-sofie-sigv
   $("#kartLenke").href = `https://www.google.com/maps/d/viewer?mid=${mid}`;
   $("#pins").innerHTML = C.kart.steder.map(s => `
     <li><span class="dot" style="background:${esc(s.farge)}"></span>
-    <div>${esc(s.navn)}<br><span class="muted">${esc(s.info)}</span>
-    ${s.lat != null ? `<br><a href="https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}" target="_blank" rel="noopener">Åpne i Google Maps</a>` : ""}</div></li>`).join("");
+    <div><span class="pin-navn">${esc(s.navn)}</span><span class="pin-info muted">${esc(s.info)}</span>
+    ${s.lat != null ? `<a class="pin-lenke" href="https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}" target="_blank" rel="noopener">Åpne i Google Maps</a>` : ""}</div></li>`).join("");
 })();
 
 /* ============ Bildekarusell ============ */
 (function () {
   const ul = $("#karusell");
+  // Bilder som allerede vises andre steder på siden. På mobil viser karusellen bare de andre.
+  const brukt = new Set([...document.querySelectorAll("main img")].map(i => i.getAttribute("src").replace("media/", "")));
   ul.innerHTML = C.bilder.map(b => `
-    <li><img src="media/${esc(b.fil)}" alt="${esc(b.alt)}" width="${b.b}" height="${b.h}" style="aspect-ratio:${b.b}/${b.h}" loading="lazy"></li>`).join("");
+    <li${brukt.has(b.fil) ? ' class="brukt"' : ""}><img src="media/${esc(b.fil)}" alt="${esc(b.alt)}" width="${b.b}" height="${b.h}" style="aspect-ratio:${b.b}/${b.h}" loading="lazy"></li>`).join("");
   const bla = retning => ul.scrollBy({ left: retning * ul.clientWidth * 0.8, behavior: redusert ? "auto" : "smooth" });
   $("#karForrige").onclick = () => bla(-1);
   $("#karNeste").onclick = () => bla(1);
@@ -805,9 +858,9 @@ form.addEventListener("input", e => {
 });
 
 function aapne() { if (APEN) dlg.showModal(); }
-$("#aapne").onclick = aapne; flyt.onclick = aapne;
+$("#aapne").onclick = aapne; flyt.onclick = aapne; $("#mbSvar").onclick = aapne; $("#kfSvar").onclick = aapne;
 dlg.addEventListener("close", () => { if (!$("#takk").hidden) { nullstill(); $("#takk").hidden = true; form.hidden = false; } });
-if (!APEN) ["#aapne", "#flyt"].forEach(id => { const b = $(id); b.textContent = "Påmelding åpner snart"; b.disabled = true; });
+if (!APEN) ["#aapne", "#flyt", "#mbSvar", "#kfSvar"].forEach(id => { const b = $(id); b.textContent = "Påmelding åpner snart"; b.disabled = true; });
 if (hent("bryllup-pameldt")) $("#pameldt").hidden = false;
 
 function markerFeil(el, tekst) {

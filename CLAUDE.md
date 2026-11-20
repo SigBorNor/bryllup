@@ -17,6 +17,12 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
   - `C.hoteller` er hotellene i bolken «Hoteller og rabattordning» (pitch, avtale, booking, nettside, kartsøk). `avtaleOmrade: true` legger hotellet under «Hoteller med avtale» øverst. De andre vises under «Andre hoteller». Knappen i den grønne boksen under «Dagene før» åpner den samme overliggende visningen.
   - `C.tips` er tipsene som åpnes fra fredagen og fra Praktisk info. `bilde: null` gir kort uten bilde. Ett tips kan ha én lenke (`lenke`, `lenkeTekst`) eller flere (`lenker: [{ lenke, lenkeTekst }]`).
   - Tekstfelt tåler både én streng og en liste med avsnitt.
+- **Mobilvisning (under 48rem):** egen blokk nederst i `style.css`. PC-visningen påvirkes ikke. `.kun-mobil` vises bare på mobil, `.kun-pc` bare på større skjermer. På mobil:
+  - Boksen «Vi inviterer deg til bryllup» øverst i Om oss (`C.kortFortalt`), gyllen bakgrunn (`--script`), med svarfrist, svarknapp og «+ Legg bryllupet i kalenderen» (lørdagen fra `C.dager`). Svarknappen under historien (`#svar`) er skjult.
+  - Kortere tekster: `C.bryllupsdagen.tekstMobil` og `C.dageneForIntroMobil`. Endres langteksten, bør kortteksten sjekkes også.
+  - Tettere tidslinje, infoknappene i rutenett, bilderekkene som sveipbare striper, Krogerup-bildet i full bredde, lavere kart med én linje per sted.
+  - Karusellen viser bare bilder som ikke allerede er på siden (klassen `brukt`).
+  - Topplinje (`#mobilbar`) med «Innhold» og «Svar» i stedet for de flytende knappene.
 - **Farger og fonter:** `:root` øverst i `style.css`.
 - **Innstillinger:** `config.js` (kode, `scriptUrl`, `maksPersoner`, `paameldingApen`).
 - **Bilder:** `media/`. Videoen ligger i `media/hav.mp4` (under ca. 8 MB, spilles uten lyd). Den er bearbeidet: sakket ned til 60 % med beregnede mellombilder, beskåret 10 % på siden med lyst gjenskinn (toppen av filen, venstre side når den vises rotert på PC), og slutten toner over i starten så sløyfen ikke har noe hopp. Filen er 720 × 1152. `media/hav.jpg` er første bilde i videoen og vises mens den lastes. Byttes videoen, må begge lages på nytt.
@@ -26,9 +32,9 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 
 ## Beslutninger som er tatt (ikke endre uten å avklare med Sigve og Sofie)
 - Forside: fullskjermsvideo av vann med «Bryllupsinvitasjon / Sofie og Sigve / 17.07.2027» i Fraunces, og kodefelt. Videoen er filmet i høydeformat og roteres −90 grader på liggende skjermer (`style.css`), så mer av bildet vises.
-- Sideoppbygning etter koden: Om oss (historien delt i to: første del med bilde til høyre, andre del med bilde til venstre og svarknapp og «+ Legg i kalender» under) → Bryllupsdagen (tekst, bilde, tidslinje, fem infoknapper inkludert «Reise til Humlebæk») → tre bilder → Dagene før (intro med grønn boks om overnatting til høyre på PC og under torsdag og fredag på mobil, torsdag og fredag skilt med en strek) → tre bilder → Kart (Google My Maps, innebygd) → Bilder (karusell) → Praktisk info nederst (fire bolker som åpnes ved klikk: På selve dagen, Overnatting, Reise til området, Ting å gjøre i området). Innholdsfortegnelse: sidemeny til venstre på store skjermer, knappen «Innhold» oppe til høyre på små. Begge bygges fra `data-toc`.
+- Sideoppbygning etter koden: Om oss (historien delt i to: første del med bilde til høyre, andre del med bilde til venstre og svarknapp og «+ Legg i kalender» under) → Bryllupsdagen (tekst, bilde, tidslinje, fem infoknapper inkludert «Reise til Humlebæk») → tre bilder → Dagene før (intro med grønn boks om overnatting til høyre på PC og under torsdag og fredag på mobil, torsdag og fredag skilt med en strek) → tre bilder → Kart (Google My Maps, innebygd) → Bilder (karusell) → Praktisk info nederst (fire bolker som åpnes ved klikk: På selve dagen, Overnatting, Reise til området, Ting å gjøre i området). Innholdsfortegnelse: sidemeny til venstre på store skjermer, knappen «Innhold» oppe til høyre på nettbrett, og i topplinjen på mobil. Begge bygges fra `data-toc`.
 - Alle ser «Dagene før». Bryteren som skjulte torsdag og fredag er fjernet.
-- Flytende svarknapp vises på alle skjermstørrelser når den vanlige knappen ikke er på skjermen.
+- Flytende svarknapp vises på PC og nettbrett når den vanlige knappen ikke er på skjermen. På mobil ligger svarknappen i topplinjen.
 - Påmelding: Ja eller Nei øverst. Per person: matallergi, overnatting lør–søn (Ja/Nei), brunsj (Ja/Nei), og om de er i området torsdag og fredag (Ja/Nei/Vet ikke). Alle fire må besvares. Gjester arver valgene fra første person. Ikke noe felt for romønske. Taler: bare infotekst med kontakt til toastmaster.
 - Etter påmelding vises sum å betale, og gjesten får en e-post med oppsummering.
 - Betaling: Vipps eller MobilePay til Sigve.
