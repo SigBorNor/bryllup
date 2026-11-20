@@ -56,12 +56,11 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 .hero::after{content:"";position:absolute;inset:0;background:rgba(30,40,48,.18)}
 .hero-inner{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.75rem;color:var(--script)}
 .hero h1{font:400 clamp(1.05rem,3.6vw,1.5rem)/1.2 var(--f-serif);letter-spacing:.22em;text-transform:uppercase;margin:0}
-/* Navnetrekket: håndtegnet «Sofie ♡ Sigve» (media/sofie-sigve.svg). Vektorgrafikk, så det er skarpt i alle størrelser.
-   Det brukes som maske, så fargen følger teksten rundt (currentColor). Størrelsen settes med width der det brukes. */
-.navnetrekk{display:block;width:12rem;max-width:100%;aspect-ratio:727/145;background:currentColor;
-  -webkit-mask:url("media/sofie-sigve.svg") center/contain no-repeat;mask:url("media/sofie-sigve.svg") center/contain no-repeat}
+/* Navnetrekket: håndtegnet «Sofie ♡ Sigve» (symbolet #navnetrekk øverst i index.html). Vektorgrafikk, så det er skarpt i alle størrelser.
+   Fargen følger teksten rundt (currentColor). Størrelsen settes med width der det brukes. */
+.navnetrekk{display:block;width:12rem;max-width:100%;height:auto;aspect-ratio:630/138;fill:currentColor;overflow:visible}
 .hero .names{margin:1.1rem 0 .5rem;filter:drop-shadow(0 1px 10px rgba(20,30,40,.4))}
-.hero .names .navnetrekk{width:clamp(17rem,62vw,36rem);margin:0 auto}
+.hero .names .navnetrekk{width:clamp(18rem,82vw,44rem);margin:0 auto}
 .hero .date{font:400 clamp(1.25rem,4vw,1.9rem)/1.2 var(--f-serif);letter-spacing:.12em;margin:.6rem 0 0}
 .hero h1,.hero .date{text-shadow:0 1px 16px rgba(20,30,40,.35)}
 .gate{margin-top:2.5rem;width:100%;max-width:17rem;display:grid;gap:.6rem}
@@ -287,7 +286,7 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 
 .fot{padding:2rem 0 4.5rem;text-align:center}
 .fot p{color:var(--muted);margin:0}
-.fot .navnetrekk{width:13rem;margin:0 auto}
+.fot .navnetrekk{width:12rem;margin:0 auto}
 
 /* Flytende svarknapp: vises når den vanlige knappen ikke er på skjermen */
 .floating{position:fixed;right:1.25rem;bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));margin:0;z-index:20;box-shadow:0 6px 18px rgba(60,50,52,.18)}
@@ -403,7 +402,7 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
   .mobilbar:not([hidden]){display:flex;align-items:center;gap:.5rem;position:fixed;top:0;left:0;right:0;z-index:31;
     padding:calc(.45rem + env(safe-area-inset-top,0px)) .75rem .45rem 1.25rem;background:var(--papir);border-bottom:1px solid var(--linje)}
   .mb-navn{margin-right:auto}
-  .mb-navn .navnetrekk{width:7.75rem}
+  .mb-navn .navnetrekk{width:7.5rem}
   .mb-innhold{background:none;border:1px solid var(--linje);border-radius:0;color:var(--ink);font:400 .75rem/1 var(--f-serif);letter-spacing:.09em;text-transform:uppercase;padding:.65rem .7rem;cursor:pointer}
   .mb-svar{font-size:.875rem;padding:.6rem .9rem}
   .toc{top:calc(3.5rem + env(safe-area-inset-top,0px))}
