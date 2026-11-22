@@ -148,13 +148,14 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
     }
     tekstLinjer.push("", "Vi gleder oss til å feire med " + (du === "du" ? "deg" : "dere") + "!");
   }
+  tekstLinjer.push("", "Lurer " + du + " på noe om feiringen eller trenger tips til overnatting og aktiviteter rundt Humlebæk, finner " + du + " det på nettsiden sofieogsigve.no.");
   tekstLinjer.push("", "Har " + du + " spørsmål eller vil " + du + " endre noe? Svar på denne e-posten eller ring oss på:",
     "– Sigve: " + KONTAKT.sigve, "– Sofie: " + KONTAKT.sofie);
 
   // HTML-versjon med navnetrekket nederst (bildet ligger på nettsiden). Ren tekst er reserve for e-postprogrammer uten HTML.
   const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const html = '<div style="font-family:Georgia,serif;font-size:16px;line-height:1.6;color:#5E4F51;max-width:560px">' +
-    tekstLinjer.map(l => l === "" ? "<br>" : esc(l) + "<br>").join("") +
+    tekstLinjer.map(l => l === "" ? "<br>" : esc(l).replace("sofieogsigve.no", '<a href="https://www.sofieogsigve.no" style="color:#5E4F51">sofieogsigve.no</a>') + "<br>").join("") +
     '<br><img src="' + NAVNETREKK_URL + '" alt="Sofie ♡ Sigve" width="220" style="display:block;width:220px;height:auto;margin-top:8px"></div>';
 
   const melding = {
