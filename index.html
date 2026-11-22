@@ -790,6 +790,9 @@ const dlg = $("#dlg"), form = $("#form"), personerEl = $("#personer");
 const FELT = ["overnatting", "brunsj", "torsdag", "fredag"];
 let teller = 0;
 
+// Landskoder i telefonfeltet. Den første er forhåndsvalgt. «Annet» betyr at gjesten skriver hele nummeret med + selv.
+const LANDKODER = [["Norge", "+47"], ["Danmark", "+45"], ["Sverige", "+46"], ["Finland", "+358"], ["Island", "+354"],
+  ["Tyskland", "+49"], ["Nederland", "+31"], ["Storbritannia", "+44"], ["Frankrike", "+33"], ["Spania", "+34"], ["USA / Canada", "+1"]];
 function personKort(i, arv) {
   const id = ++teller;
   const d = document.createElement("div");
@@ -819,7 +822,12 @@ function personKort(i, arv) {
     ${i ? `<label class="field">Navn<input name="pnavn" required><span class="err"></span></label>` : `
     <label class="field">Navn<input name="navn" autocomplete="name" required><span class="err"></span></label>
     <label class="field">E-post<input type="email" name="epost" autocomplete="email" inputmode="email" required><span class="err"></span></label>
-    <label class="field"><span>Telefon <span class="muted">(valgfritt)</span></span><input type="tel" name="telefon" autocomplete="tel" inputmode="tel"></label>`}
+    <label class="field"><span>Telefon</span>
+      <span class="tlf">
+        <select name="landkode" aria-label="Landskode">${LANDKODER.map(([land, kode]) => `<option value="${kode}">${land} ${kode}</option>`).join("")}<option value="">Annet</option></select>
+        <input type="tel" name="telefon" autocomplete="tel-national" inputmode="tel" required>
+      </span><span class="err"></span></label>
+    <label class="field">Adresse<input name="adresse" autocomplete="street-address" placeholder="Gate 1, 0123 Sted, Land" required><span class="err"></span></label>`}
     <label class="field ja-only"><span>Matallergi <span class="muted">(valgfritt)</span></span><input name="allergier"></label>
     <div class="to-kol ja-only">
       ${tilvalg("overnatting", "Overnatting", "lør–søn")}
@@ -884,6 +892,14 @@ function markerFeil(el, tekst) {
   if (er) er.textContent = tekst;
 }
 
+// Telefon med landskode: «+47 468 16 165». Tom streng hvis nummeret ikke ser gyldig ut.
+function telefonMedKode() {
+  const kode = form.elements.landkode.value, nr = form.elements.telefon.value.trim();
+  const sifre = nr.replace(/[^\d]/g, "");
+  if (!kode) return /^\+\d/.test(nr) && sifre.length >= 7 ? nr : "";
+  return sifre.length >= 6 ? kode + " " + nr.replace(/^\+\d+\s*/, "") : "";
+}
+
 let sisteSvar = null;
 form.addEventListener("submit", async e => {
   e.preventDefault();
@@ -894,6 +910,10 @@ form.addEventListener("submit", async e => {
 
   if (!navn) markerFeil(form.elements.navn, "Fyll inn navnet ditt.");
   if (!/^\S+@\S+\.\S+$/.test(epost)) markerFeil(form.elements.epost, "Fyll inn en gyldig e-postadresse.");
+  const telefon = telefonMedKode();
+  if (!telefon) markerFeil(form.querySelector(".tlf"), form.elements.landkode.value ? "Fyll inn telefonnummeret ditt." : "Skriv hele nummeret med landskode, for eksempel +49 151 2345678.");
+  const adresse = form.elements.adresse.value.trim();
+  if (adresse.length < 5) markerFeil(form.elements.adresse, "Fyll inn adressen din.");
   personerEl.querySelectorAll("[name=pnavn]").forEach(inp => { if (!inp.value.trim()) markerFeil(inp, "Fyll inn navn."); });
   if (kommer) personerEl.querySelectorAll(".gruppe").forEach(g => { if (!g.querySelector("input:checked")) markerFeil(g, "Velg et svar."); });
   const forste = form.querySelector(".invalid");
@@ -903,7 +923,7 @@ form.addEventListener("submit", async e => {
   }
 
   const personer = [...personerEl.children].map((d, i) => lesPerson(d, i));
-  const payload = { kode: CFG.kode, kommer, navn, epost, telefon: form.elements.telefon.value.trim(), personer, nettside: form.elements.nettside.value };
+  const payload = { kode: CFG.kode, kommer, navn, epost, telefon, adresse, personer, nettside: form.elements.nettside.value };
 
   if (!CFG.scriptUrl || CFG.scriptUrl.includes("LIM-INN")) { st.textContent = "Påmeldingen er ikke koblet til regnearket ennå."; st.classList.add("feil"); return; }
   const btn = $("#send"); btn.disabled = true; btn.textContent = "Sender …";

@@ -23,7 +23,8 @@
 const KOLONNER = [
   "Tidspunkt", "Påmeldings-ID", "Påmeldt av", "E-post", "Telefon",
   "Navn", "Kommer", "Torsdag", "Fredag", "Lørdag", "Søndag brunsj",
-  "Overnatting lør–søn", "Allergier / mathensyn", "Å betale (NOK)"
+  "Overnatting lør–søn", "Allergier / mathensyn", "Å betale (NOK)",
+  "Adresse"
 ];
 
 // Fanen Innstillinger: [ledetekst, standardverdi]. Verdiene står i kolonne B.
@@ -82,7 +83,8 @@ function doPost(e) {
       tid, id, navn, epost, tekst(d.telefon, 40),
       l.navn, kommer ? "Ja" : "Nei",
       l.torsdag, l.fredag, kommer ? "Ja" : "", l.brunsj, l.overnatting,
-      l.allergier, kommer ? l.sum : ""
+      l.allergier, kommer ? l.sum : "",
+      tekst(d.adresse, 300)
     ].map(trygg));
 
     const ark = bok.getSheetByName("Svar");

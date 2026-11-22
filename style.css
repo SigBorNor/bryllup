@@ -332,6 +332,10 @@ fieldset{border:0;padding:0;margin:0}
 .field{display:grid;gap:.35rem}
 input:not([type=radio]):not([type=checkbox]){width:100%;font:400 1rem/1.4 var(--f-serif);color:var(--ink);background:var(--felt);border:1px solid var(--linje);border-radius:0;padding:.75rem .8rem}
 input:focus{outline:2px solid var(--linje);outline-offset:0}
+/* Telefon: landskode + nummer */
+.tlf{display:grid;grid-template-columns:auto 1fr;gap:.5rem}
+.tlf select{font:400 1rem/1.4 var(--f-serif);color:var(--ink);background:var(--felt);border:1px solid var(--linje);border-radius:0;padding:.75rem .5rem;max-width:11rem}
+.tlf.invalid select,.tlf.invalid input{border-color:var(--danger)}
 input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
 .err{display:block;font-size:.875rem;color:var(--danger)}
 .err:empty{display:none}
