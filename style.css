@@ -100,6 +100,7 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
   .toc-knapp{display:none}
   .toc{display:block;position:fixed;top:2.5rem;left:1.5rem;width:calc(var(--toc) - 2rem);z-index:5;transition:opacity .3s}
   .toc.skjult{opacity:0;pointer-events:none}
+  .toc-navn{width:9.5rem;margin:0 0 1.6rem .1rem;color:var(--ink)}
   .toc ol{list-style:none;margin:0;padding:.25rem 0 .25rem 1.25rem;border-left:1px solid var(--linje)}
   .toc li+li{margin-top:.9rem}
   .toc a{position:relative;display:block;text-decoration:none;font-size:.8125rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
@@ -177,22 +178,26 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 
 /* Tidslinje: vannrett på store skjermer, loddrett på mobil */
 .tidslinje{list-style:none;margin:3.5rem 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative}
-.tidslinje::before{content:"";position:absolute;left:0;right:0;top:2.15rem;height:1px;background:var(--linje)}
+/* Blyantstrek (media/linje-h.png og linje-v.png, laget med skisser/pencil.py) */
+.tidslinje::before{content:"";position:absolute;left:-.4rem;right:0;top:calc(2.15rem - 5px);height:10px;background:url("media/linje-h.png") 0 50%/100% 10px no-repeat}
 .tidslinje li{position:relative;padding-top:3.4rem;padding-right:1rem}
 .tidslinje li::before{content:"";position:absolute;left:0;top:calc(2.15rem - 7px);width:1px;height:14px;background:var(--linje)}
-.tidslinje li.ny-dag::before{width:12px;height:12px;border-radius:50%;border:1px solid var(--linje);background:var(--blue);top:calc(2.15rem - 6px);left:-5px}
+.tidslinje li.ny-dag::before{display:none}
+/* Hjertet fra navnetrekket markerer hver ny dag */
+.tl-hjerte{position:absolute;left:-9px;top:calc(2.15rem - 11px);width:18px;height:22px;fill:var(--linje);overflow:visible}
 .tl-dag{position:absolute;top:0;left:0;font-size:.8125rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .tl-tid{display:block;font-size:1.375rem;line-height:1.3}
 .tl-tittel{display:block;margin-top:.35rem;font-size:.9375rem;letter-spacing:.08em;text-transform:uppercase}
 .tl-sted{display:block;font-size:.9375rem;color:var(--muted)}
 @media (max-width:48rem){
   .tidslinje{grid-template-columns:1fr;padding-left:1.75rem}
-  .tidslinje::before{left:.35rem;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .tidslinje::before{left:calc(.35rem - 5px);right:auto;top:0;bottom:0;width:10px;height:auto;background:url("media/linje-v.png") 50% 0/10px 100% no-repeat}
   .tidslinje li{padding:0 0 1.75rem}
   .tidslinje li.ny-dag{padding-top:1.75rem}
   .tidslinje li:first-child{padding-top:1.6rem}
   .tidslinje li::before{left:calc(-1.75rem + .35rem - 6px);top:.65rem;width:13px;height:1px}
-  .tidslinje li.ny-dag::before{left:calc(-1.75rem + .35rem - 6px);top:calc(1.75rem + .5rem)}
+  .tl-hjerte{left:calc(-1.75rem + .35rem - 8px);top:calc(1.75rem + .5rem - 10px);width:16px;height:20px}
+  .tidslinje li:first-child .tl-hjerte{top:calc(1.6rem + .5rem - 10px)}
   .tidslinje li:first-child::before{top:calc(1.6rem + .5rem)}
   .tl-dag{top:0}
 }
@@ -445,6 +450,8 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
   .tidslinje li::before{top:.7rem}
   .tidslinje li.ny-dag::before{top:calc(1.75rem + .62rem)}
   .tidslinje li:first-child::before{top:calc(1.6rem + .62rem)}
+  .tl-hjerte{top:calc(1.75rem + .62rem - 10px)}
+  .tidslinje li:first-child .tl-hjerte{top:calc(1.6rem + .62rem - 10px)}
 
   /* Infoknappene i et rutenett med to like store knapper per rad */
   #dagInfo{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1.75rem}
@@ -468,3 +475,9 @@ input.invalid{border-color:var(--danger);outline:1px solid var(--danger)}
   .pin-info{display:none}
   .pins li div:not(:has(.pin-lenke)) .pin-info{display:inline}
 }
+
+/* Liten tekst under dagstittelen i «Torsdag og fredag» */
+.for-dag h3{margin-bottom:.15rem}
+.for-dag .under-tittel{margin:0 0 1rem}
+/* Navnetrekket over innholdsfortegnelsen vises bare i sidemenyen på PC */
+@media (max-width:71.99rem){.toc-navn{display:none}}
