@@ -179,19 +179,20 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
 /* Tidslinje: vannrett på store skjermer, loddrett på mobil */
 .tidslinje{list-style:none;margin:3.5rem 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative}
 /* Blyantstrek (media/linje-h.png og linje-v.png, laget med skisser/pencil.py) */
-.tidslinje::before{content:"";position:absolute;left:-.4rem;right:0;top:calc(2.15rem - 5px);height:10px;background:url("media/linje-h.png") 0 50%/100% 10px no-repeat}
+.tidslinje::before{content:"";position:absolute;left:12px;right:0;top:calc(2.15rem - 5px);height:10px;background:url("media/linje-h.png") 0 50%/100% 10px no-repeat}
 .tidslinje li{position:relative;padding-top:3.4rem;padding-right:1rem}
 .tidslinje li::before{content:"";position:absolute;left:0;top:calc(2.15rem - 7px);width:1px;height:14px;background:var(--linje)}
 .tidslinje li.ny-dag::before{display:none}
 /* Hjertet fra navnetrekket markerer hver ny dag */
-.tl-hjerte{position:absolute;left:-9px;top:calc(2.15rem - 11px);width:18px;height:22px;fill:var(--linje);overflow:visible}
+.tl-hjerte{position:absolute;left:-9px;top:calc(2.15rem - 11px);width:18px;height:22px;fill:var(--linje);overflow:visible;
+  background:var(--side);box-sizing:content-box;padding:0 5px;margin-left:-5px}   /* bakgrunnen gir et lite opphold i streken rundt hjertet */
 .tl-dag{position:absolute;top:0;left:0;font-size:.8125rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .tl-tid{display:block;font-size:1.375rem;line-height:1.3}
 .tl-tittel{display:block;margin-top:.35rem;font-size:.9375rem;letter-spacing:.08em;text-transform:uppercase}
 .tl-sted{display:block;font-size:.9375rem;color:var(--muted)}
 @media (max-width:48rem){
   .tidslinje{grid-template-columns:1fr;padding-left:1.75rem}
-  .tidslinje::before{left:calc(.35rem - 5px);right:auto;top:0;bottom:0;width:10px;height:auto;background:url("media/linje-v.png") 50% 0/10px 100% no-repeat}
+  .tidslinje::before{left:calc(.35rem - 5px);right:auto;top:calc(1.6rem + .62rem + 13px);bottom:0;width:10px;height:auto;background:url("media/linje-v.png") 50% 0/10px 100% no-repeat}
   .tidslinje li{padding:0 0 1.75rem}
   .tidslinje li.ny-dag{padding-top:1.75rem}
   .tidslinje li:first-child{padding-top:1.6rem}
