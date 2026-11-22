@@ -148,9 +148,13 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
     }
     tekstLinjer.push("", "Vi gleder oss til å feire med " + (du === "du" ? "deg" : "dere") + "!");
   }
-  tekstLinjer.push("", "Lurer " + du + " på noe om feiringen eller trenger tips til overnatting og aktiviteter rundt Humlebæk, finner " + du + " det på nettsiden sofieogsigve.no.");
-  tekstLinjer.push("", "Har " + du + " spørsmål eller vil " + du + " endre noe? Svar på denne e-posten eller ring oss på:",
-    "– Sigve: " + KONTAKT.sigve, "– Sofie: " + KONTAKT.sofie);
+  if (kommer) {
+    tekstLinjer.push("", "Lurer " + du + " på noe om feiringen eller trenger tips til overnatting og aktiviteter rundt Humlebæk, finner " + du + " det på nettsiden sofieogsigve.no.");
+    tekstLinjer.push("", "Har " + du + " spørsmål eller vil " + du + " endre noe? Svar på denne e-posten eller ring oss på:");
+  } else {
+    tekstLinjer.push("", "Endrer planene seg, kan " + du + " svare på denne e-posten eller ringe oss på:");
+  }
+  tekstLinjer.push("– Sigve: " + KONTAKT.sigve, "– Sofie: " + KONTAKT.sofie);
 
   // HTML-versjon med navnetrekket nederst (bildet ligger på nettsiden). Ren tekst er reserve for e-postprogrammer uten HTML.
   const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
