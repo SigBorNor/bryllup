@@ -32,6 +32,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 - **Hjertet** fra navnetrekket er et eget symbol (`#hjerte`) og markerer hver ny dag på tidslinjen under Bryllupsdagen (`.tl-hjerte`). Navnetrekket står også over innholdsfortegnelsen i sidemenyen på PC (`.toc-navn`).
 - **Blyantstreken** på tidslinjen er bilder: `media/linje-h.png` (PC) og `media/linje-v.png` (mobil), laget med blyantmotoren i `/home/claude/skisser/pencil.py` (ikke i repoet).
 - **Dagene** i «Torsdag og fredag»: `tittel` er den store overskriften, `undertittel` den lille, lyse teksten under.
+- **Oppsummering på e-post** (`sendOppsummering` i `apps-script.gs`): hilser med fornavnene til alle i påmeldingen, du/dere etter antall, telefonnumre i `KONTAKT` og navnetrekket nederst som bilde (`media/navnetrekk-epost.png`, hentes fra nettsiden, så filen må ligge der).
 - **Håndskriftfont:** `fonts/HAD-Script.woff2`. Reservefont er Caveat. Brukes nå bare i «Tusen takk!».
 
 ## Beslutninger som er tatt (ikke endre uten å avklare med Sigve og Sofie)

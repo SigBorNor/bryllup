@@ -36,6 +36,10 @@ const INNSTILLINGER = [
   ["Svar på e-posten går til (valgfritt)", ""]
 ];
 
+// Kontaktinfo og navnetrekk i oppsummeringen på e-post
+const KONTAKT = { sigve: "468 16 165", sofie: "477 08 445" };
+const NAVNETREKK_URL = "https://www.sofieogsigve.no/media/navnetrekk-epost.png";
+
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
@@ -111,13 +115,19 @@ function lesInnstillinger(bok) {
 }
 
 function sendOppsummering(inn, navn, epost, kommer, linjer) {
-  const tekstLinjer = ["Hei " + navn + "!", ""];
+  // Fornavn til alle i påmeldingen: «Sigve», «Sigve og Sofie», «Sigve, Sofie og Ola»
+  const fornavn = linjer.map(l => String(l.navn).trim().split(/\s+/)[0]).filter(Boolean);
+  if (!fornavn.length) fornavn.push(String(navn).trim().split(/\s+/)[0]);
+  const navneliste = fornavn.length > 1 ? fornavn.slice(0, -1).join(", ") + " og " + fornavn[fornavn.length - 1] : fornavn[0];
+  const du = fornavn.length > 1 ? "dere" : "du";
+
+  const tekstLinjer = ["Hei " + navneliste + "!", ""];
   if (!kommer) {
-    tekstLinjer.push("Takk for beskjed. Vi har registrert at dere dessverre ikke kan komme:", "");
+    tekstLinjer.push("Tusen takk for at " + du + " svarte på invitasjonen til bryllupet vårt. Vi har registrert at " + du + " dessverre ikke kan komme:", "");
     linjer.forEach(l => tekstLinjer.push("– " + l.navn));
-    tekstLinjer.push("", "Dere blir savnet!");
+    tekstLinjer.push("", (du === "du" ? "Du" : "Dere") + " blir savnet!");
   } else {
-    tekstLinjer.push("Tusen takk for svaret! Dette har vi registrert:", "");
+    tekstLinjer.push("Tusen takk for at " + du + " svarte på invitasjonen til bryllupet vårt. Dette er det vi har registrert:", "");
     linjer.forEach(l => {
       tekstLinjer.push("– " + l.navn + ": " + [
         l.overnatting === "Ja" ? "overnatter på Krogerup lør–søn" : "overnatter ikke på Krogerup",
@@ -136,14 +146,22 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
       tekstLinjer.push("", "Å betale: " + sum + " NOK (" + deler.join(", ") + ").");
       if (inn.betaling) tekstLinjer.push(inn.betaling);
     }
-    tekstLinjer.push("", "Vi gleder oss til å feire med dere!");
+    tekstLinjer.push("", "Vi gleder oss til å feire med " + (du === "du" ? "deg" : "dere") + "!");
   }
-  tekstLinjer.push("", "Vil du endre noe? Svar på denne e-posten.", "", "Hilsen Sofie og Sigve");
+  tekstLinjer.push("", "Har " + du + " spørsmål eller vil " + du + " endre noe? Svar på denne e-posten eller ring oss på:",
+    "– Sigve: " + KONTAKT.sigve, "– Sofie: " + KONTAKT.sofie);
+
+  // HTML-versjon med navnetrekket nederst (bildet ligger på nettsiden). Ren tekst er reserve for e-postprogrammer uten HTML.
+  const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const html = '<div style="font-family:Georgia,serif;font-size:16px;line-height:1.6;color:#5E4F51;max-width:560px">' +
+    tekstLinjer.map(l => l === "" ? "<br>" : esc(l) + "<br>").join("") +
+    '<br><img src="' + NAVNETREKK_URL + '" alt="Sofie ♡ Sigve" width="220" style="display:block;width:220px;height:auto;margin-top:8px"></div>';
 
   const melding = {
     to: epost,
-    subject: "Svaret ditt er registrert – bryllup Sofie & Sigve 17.07.2027",
-    body: tekstLinjer.join("\n"),
+    subject: "Vi har fått svaret ditt – bryllup Sofie & Sigve 17.07.2027",
+    body: tekstLinjer.concat(["", "Sofie ♡ Sigve"]).join("\n"),
+    htmlBody: html,
     name: "Sofie & Sigve"
   };
   if (inn.svarTil) melding.replyTo = inn.svarTil;
