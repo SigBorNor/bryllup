@@ -70,7 +70,8 @@ function doPost(e) {
       const overnatting = jaNei(p.overnatting), brunsj = jaNei(p.brunsj);
       return {
         navn: tekst(p.navn, 120),
-        torsdag: kommer ? treValg(p.torsdag) : "",
+        // Torsdag spørres ikke lenger om (sammenkomsten er flyttet til fredag). Kolonnen står igjen så rekkefølgen ikke endres.
+        torsdag: kommer && p.torsdag ? treValg(p.torsdag) : "",
         fredag: kommer ? treValg(p.fredag) : "",
         brunsj: kommer ? brunsj : "",
         overnatting: kommer ? overnatting : "",
@@ -134,8 +135,7 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
       tekstLinjer.push("– " + l.navn + ": " + [
         l.overnatting === "Ja" ? "overnatter på Krogerup lør–søn" : "overnatter ikke på Krogerup",
         l.brunsj === "Ja" ? "brunsj søndag" : "ikke brunsj",
-        "torsdag: " + l.torsdag.toLowerCase(),
-        "fredag: " + l.fredag.toLowerCase()
+        "sammenkomst fredag: " + l.fredag.toLowerCase()
       ].join(", ") + (l.allergier ? ". Matallergi: " + l.allergier : ""));
     });
     const nOv = linjer.filter(l => l.overnatting === "Ja").length;
@@ -231,10 +231,8 @@ function oppsett() {
   const tall = [
     ["Kommer", `=COUNTIF(Svar!G2:G${s}"Ja")`],
     ["Kan ikke komme", `=COUNTIF(Svar!G2:G${s}"Nei")`],
-    ["Torsdag – ja", `=COUNTIF(Svar!H2:H${s}"Ja")`],
-    ["Torsdag – vet ikke", `=COUNTIF(Svar!H2:H${s}"Vet ikke")`],
-    ["Fredag – ja", `=COUNTIF(Svar!I2:I${s}"Ja")`],
-    ["Fredag – vet ikke", `=COUNTIF(Svar!I2:I${s}"Vet ikke")`],
+    ["Sammenkomst fredag – ja", `=COUNTIF(Svar!I2:I${s}"Ja")`],
+    ["Sammenkomst fredag – vet ikke", `=COUNTIF(Svar!I2:I${s}"Vet ikke")`],
     ["Lørdag", `=COUNTIF(Svar!J2:J${s}"Ja")`],
     ["Søndag brunsj", `=COUNTIF(Svar!K2:K${s}"Ja")`],
     ["Overnatting lør–søn", `=COUNTIF(Svar!L2:L${s}"Ja")`],

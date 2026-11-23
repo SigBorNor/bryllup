@@ -67,25 +67,24 @@ const C = {
   // Knappene under tidslinjen. Navnene viser til «info» lenger ned.
   dagInfo: ["dresscode", "overnatting", "taler", "gaver", "reise"],
 
+  // «Dagen før dagen» (fredag). dato vises ved siden av overskriften.
+  dagenFor: { dato: "16. juli" },
   // Kortere intro som vises på mobil i stedet for teksten under.
-  dageneForIntroMobil: "Vi inviterer først og fremst til bryllup lørdag til søndag, men mange vil kanskje komme tidligere. Er dere i området, blir det en uformell sammenkomst torsdag ettermiddag. Fredag har vi ikke noe opplegg.",
-  dageneForIntro: "Vi inviterer først og fremst til bryllup og bryllupsfest lørdag til søndag. Samtidig ser vi for oss at flere har lyst til å tilbringe litt mer tid rundt Humlebæk eller i København, og det synes vi er veldig hyggelig! For de som er i området vil vi invitere til en lavterskel sammenkomst på torsdag ettermiddag mens på fredag blir det ikke noe offisielt opplegg annet enn å nyte nærområdet og lade godt opp.",
+  dageneForIntroMobil: "Vi inviterer først og fremst til bryllup lørdag til søndag, men mange vil kanskje komme tidligere. Er dere i området, blir det en uformell sammenkomst fredag ettermiddag, dagen før dagen.",
+  dageneForIntro: "Vi inviterer først og fremst til bryllup og bryllupsfest lørdag til søndag. Samtidig ser vi for oss at flere har lyst til å tilbringe litt mer tid rundt Humlebæk eller i København, og det synes vi er veldig hyggelig! For dere som er i området, inviterer vi til en lavterskel sammenkomst fredag ettermiddag, dagen før dagen.",
 
-  // Boksen til høyre for teksten over, og kolonnen «Dagene rundt» under «Overnatting» i Praktisk info. Knappen åpner hotelloversikten.
+  // Den grønne boksen til høyre for teksten over, og kolonnen «Dagene rundt» under «Overnatting» i Praktisk info. Knappen åpner hotelloversikten.
   dageneForHotell: "Om dere vil være i området noen dager før bryllupet så ordner dere med overnatting selv. Vi har ordnet rabattordning på noen fine hoteller i området her.",
+  // Boksen under hotellboksen. Knappen åpner tipsene (C.tips).
+  dageneForTips: "Til dere som skal tilbringe flere dager i området eller vil finne på noe gøy imellom festlighetene, har vi samlet noen gode tips til ting å gjøre i området.",
 
-  // Dagene. torfre: true = vises under «Torsdag og fredag». undertittel = liten tekst under tittelen. visTips: true = knapp som åpner tipsene.
+  // Dagene. forDagen: true = vises under «Dagen før dagen». undertittel = liten tekst under tittelen.
   dager: [
-    { id: "tor", fane: "Tor 15.", dato: "20270715", torfre: true,
-      tittel: "Torsdag 15. juli", undertittel: "Vi møtes og hygger oss",
+    { id: "fre", fane: "Fre 16.", dato: "20270716", forDagen: true,
+      tittel: "Fredag 16. juli", undertittel: "Vi møtes og hygger oss",
       tekst: "Vi som allerede er i Danmark møtes, blir kjent, spiser, drikker og hygger oss. Informasjon om dette kommer litt senere.",
       rader: [["Tid", "Ettermiddag"], ["Sted", "I eller rundt Humlebæk"]],
       kalender: "Sammenkomst før bryllupet (Sofie & Sigve)" },
-    { id: "fre", fane: "Fre 16.", dato: "20270716", torfre: true,
-      tittel: "Fredag 16. juli", undertittel: "Ikke noe offisielt opplegg",
-      tekst: "Bruk dagen som dere ønsker, nyt området og lad opp til lørdagen. Vi har samlet noen tips til ting å se og gjøre.",
-      visTips: true,
-      kalender: "Bryllupshelg: fredag (Sofie & Sigve)" },
     { id: "lor", fane: "Lør 17.", dato: "20270717",
       tittel: "Bryllupsdagen", tekst: "Vielse 13:00, første skål 15:30, middag 17:30, fest etter middag.",
       kalender: "Bryllup Sofie & Sigve" },
@@ -94,7 +93,7 @@ const C = {
       kalender: "Brunsj – Krogerup Højskole (Sofie & Sigve)" }
   ],
 
-  // Tips til ting å gjøre. Åpnes fra fredagen og fra «Praktisk info».
+  // Tips til ting å gjøre. Åpnes fra boksen under «Dagen før dagen» og fra «Praktisk info».
   // bilde: null = uten bilde. Legg bildet i media/ og skriv f.eks. bilde: "media/louisiana.jpg"
   tips: {
     tittel: "Ting å gjøre i området",
@@ -363,18 +362,26 @@ const C = {
       <img src="media/ski-topptur-selfie.jpg" alt="Sofie og Sigve på skitur i fjellet" width="769" height="1024" loading="lazy">
     </figure>
 
-    <!-- Torsdag og fredag (id dagene-for beholdes, så gamle lenker virker) -->
-    <section class="seksjon" id="dagene-for" data-toc="Torsdag og fredag" aria-labelledby="h-for">
-      <h2 id="h-for">Torsdag og fredag <span class="h-dato">15.–16. juli</span></h2>
+    <!-- Dagen før dagen (id dagene-for beholdes, så gamle lenker virker) -->
+    <section class="seksjon" id="dagene-for" data-toc="Dagen før dagen" aria-labelledby="h-for">
+      <h2 id="h-for">Dagen før dagen <span class="h-dato" id="forDato"></span></h2>
       <div class="for-topp">
-        <p class="ingress" id="forIntro"></p>
-        <p class="ingress kun-mobil" id="forIntroMobil" hidden></p>
-        <aside class="for-hotell" aria-label="Overnatting dagene før">
-          <p id="forHotell"></p>
-          <button type="button" class="info-knapp" data-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
-        </aside>
+        <div class="for-venstre">
+          <p class="ingress" id="forIntro"></p>
+          <p class="ingress kun-mobil" id="forIntroMobil" hidden></p>
+          <div id="forDager"></div>
+        </div>
+        <div class="for-bokser">
+          <aside class="for-hotell" aria-label="Overnatting dagene før bryllupet">
+            <p id="forHotell"></p>
+            <button type="button" class="info-knapp" data-hoteller>Se hoteller og rabattordning <span aria-hidden="true">→</span></button>
+          </aside>
+          <aside class="for-hotell" aria-label="Ting å gjøre i området">
+            <p id="forTips"></p>
+            <button type="button" class="info-knapp" data-tips>Se tips til ting å gjøre <span aria-hidden="true">→</span></button>
+          </aside>
+        </div>
       </div>
-      <div class="for-grid" id="forDager"></div>
     </section>
 
     <figure class="seksjon trio" aria-label="Flere bilder av Sofie og Sigve">
@@ -594,8 +601,10 @@ if (C.dageneForIntroMobil) {
   $("#forIntroMobil").hidden = false;
   $("#forIntro").classList.add("kun-pc");
 }
+$("#forDato").textContent = C.dagenFor.dato;
 $("#forHotell").textContent = C.dageneForHotell;
-$("#forDager").innerHTML = C.dager.filter(d => d.torfre).map(d => `
+$("#forTips").textContent = C.dageneForTips;
+$("#forDager").innerHTML = C.dager.filter(d => d.forDagen).map(d => `
   <article class="for-dag">
     <h3>${esc(d.tittel)}</h3>
     ${d.undertittel ? `<p class="kort-dag under-tittel">${esc(d.undertittel)}</p>` : ""}
@@ -802,7 +811,7 @@ $("#kfIcs").onclick = () => lastNedIcs([bryllupHendelse], "bryllup-sofie-sigve.i
 
 /* ============ Påmelding ============ */
 const dlg = $("#dlg"), form = $("#form"), personerEl = $("#personer");
-const FELT = ["overnatting", "brunsj", "torsdag", "fredag"];
+const FELT = ["overnatting", "brunsj", "fredag"];
 let teller = 0;
 
 // Landskoder i telefonfeltet. Den første er forhåndsvalgt. «Annet» betyr at gjesten skriver hele nummeret med + selv.
@@ -849,9 +858,8 @@ function personKort(i, arv) {
       ${tilvalg("brunsj", "Brunsj", "søn")}
     </div>
     <div class="torfre ja-only">
-      <p>${i ? "Er gjesten i området torsdag og fredag også?" : "Vi er glade for at du kommer i bryllupet vårt! Vet du allerede om du er i området torsdag og fredag også?"}</p>
-      ${dag("torsdag", "Torsdag")}
-      ${dag("fredag", "Fredag")}
+      <p>${i ? "Blir gjesten med på sammenkomsten fredag ettermiddag, dagen før dagen?" : "Vi er glade for at du kommer i bryllupet vårt! Vet du allerede om du blir med på sammenkomsten fredag ettermiddag, dagen før dagen?"}</p>
+      ${dag("fredag", "Fredag 16. juli")}
     </div>`;
 
   if (arv) FELT.forEach(f => { const r = d.querySelector(`[data-felt=${f}] input[value="${arv[f]}"]`); if (r) r.checked = true; });
@@ -863,7 +871,7 @@ function lesPerson(d, i) {
   return {
     navn: (i === 0 ? form.elements.navn : d.querySelector("[name=pnavn]")).value.trim(),
     allergier: d.querySelector("[name=allergier]").value.trim(),
-    overnatting: valg("overnatting"), brunsj: valg("brunsj"), torsdag: valg("torsdag"), fredag: valg("fredag")
+    overnatting: valg("overnatting"), brunsj: valg("brunsj"), fredag: valg("fredag")
   };
 }
 function nummerer() {
@@ -958,7 +966,7 @@ form.addEventListener("submit", async e => {
     ? "Svaret er registrert, og du får en oppsummering på e-post. Vi gleder oss til å feire med dere."
     : "Så synd at dere ikke kan komme. Dere blir savnet!";
   const valg = p => [p.overnatting === "Ja" ? "overnatter" : "overnatter ikke", p.brunsj === "Ja" ? "brunsj" : "ikke brunsj",
-    `tor: ${p.torsdag.toLowerCase()}`, `fre: ${p.fredag.toLowerCase()}`].join(", ");
+    `fredag: ${p.fredag.toLowerCase()}`].join(", ");
   $("#oppsummering").innerHTML = personer.map(p => `<li>${esc(p.navn)}${kommer ? `: <span class="muted">${esc(valg(p))}</span>` : ""}</li>`).join("");
 
   // Sum for overnatting og brunsj
@@ -979,10 +987,10 @@ form.addEventListener("submit", async e => {
 function hendelserForSvar() {
   if (!sisteSvar) return [];
   const p = sisteSvar.personer;
-  const med = { tor: p.some(x => x.torsdag === "Ja"), fre: p.some(x => x.fredag === "Ja"), lor: true, son: p.some(x => x.brunsj === "Ja") };
+  const med = { fre: p.some(x => x.fredag === "Ja"), lor: true, son: p.some(x => x.brunsj === "Ja") };
   return C.dager.filter(d => med[d.id]).map(d => ({
     id: d.id, dato: d.dato, tittel: d.kalender, fane: d.fane, kort: d.tittel,
-    tekst: flat(d.tekst) + (d.torfre ? " Overnatting ordnes selv." : "") + " Mer info: " + C.url
+    tekst: flat(d.tekst) + (d.forDagen ? " Overnatting ordnes selv." : "") + " Mer info: " + C.url
   }));
 }
 $("#kalIcs").onclick = () => lastNedIcs(hendelserForSvar(), "bryllupshelg-sofie-sigve.ics");
