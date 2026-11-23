@@ -15,6 +15,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
   - `C.dageneForHotell` er teksten i den grønne boksen til høyre for introen i «Torsdag og fredag». Den samme teksten står i kolonnen «Dagene rundt» under «Overnatting» i Praktisk info.
   - Bolken «Overnatting» i Praktisk info har to kolonner: «Bryllupet» (lør–søn, viser `C.info.overnatting`) og «Dagene rundt» (`C.dageneForHotell`). Knappen der åpner hotelloversikten som en overliggende visning (`#hotellDlg`, med `C.hoteller` og `hotellTekst` som innledning). Alle knapper med `data-hoteller` åpner den.
   - `C.hoteller` er hotellene i bolken «Hoteller og rabattordning» (pitch, avtale, booking, nettside, kartsøk). `avtaleOmrade: true` legger hotellet under «Hoteller med avtale» øverst. De andre vises under «Andre hoteller». Knappen i den grønne boksen under «Torsdag og fredag» åpner den samme overliggende visningen.
+  - `C.kart.steder` er listen under kartet (Vielse, Krogerup, Humlebæk Kirke, Humlebæk Stasjon). Hvert sted har en kartnål i samme farge som i Google My Maps (`farge`, symbol `ikon`: hjerte, hus, kirke eller tog) og lenker til punktet i My Maps-kartet (`viewer?mid=…&ll=lat,lng&z=17`). Koordinatene er hentet fra en KML-eksport av kartet 23.11.2026. Flyttes et punkt i My Maps, må `lat`/`lng` endres her også. Symbolene er tegnet etter betydning; ikonbildene fra Google kunne ikke hentes.
   - `C.tips` er tipsene som åpnes fra fredagen og fra Praktisk info. `bilde: null` gir kort uten bilde. Ett tips kan ha én lenke (`lenke`, `lenkeTekst`) eller flere (`lenker: [{ lenke, lenkeTekst }]`).
   - Tekstfelt tåler både én streng og en liste med avsnitt.
 - **Mobilvisning (under 48rem):** egen blokk nederst i `style.css`. PC-visningen påvirkes ikke. `.kun-mobil` vises bare på mobil, `.kun-pc` bare på større skjermer. På mobil:
@@ -61,7 +62,6 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
 - [ ] Bilder til tipsene (`C.tips.liste[].bilde`)
 - [ ] Håndskriftfont (`fonts/HAD-Script.woff2`) og delingsbilde (`media/deling.jpg`)
 - [ ] Tid og sted for torsdag
-- [ ] Kart: punktene ligger i Google My Maps (`C.kart.mid`). Vielsesstedet mangler også koordinater i listen under kartet (`C.kart.steder`)
 - [ ] Endelig kode før kortene trykkes (config.js og Innstillinger!B1)
 - [ ] Sjekk at danske gjester kan betale med MobilePay til norsk nummer
 - [ ] Slett testrader i Svar før publisering

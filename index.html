@@ -244,13 +244,16 @@ const C = {
 
   // Kartet er et Google My Maps-kart. Punktene endres i Google My Maps, ikke her.
   // mid er ID-en fra innbyggingskoden (…/embed?mid=XXXX).
-  // steder: listen under kartet, med lenke til hvert sted i Google Maps.
+  // steder: listen under kartet. Hvert sted lenker til punktet i Google My Maps-kartet.
+  //   ikon: hjerte, hus, kirke eller tog. farge: samme farge som punktet har i kartet.
+  //   Koordinatene er hentet fra kartet (eksportert som KML 23.11.2026). Flyttes et punkt i kartet, må lat/lng endres her også.
   kart: {
     mid: "13C9RRyiU2JKMPV5xLLmOFeS4qf_4Pbg",
     steder: [
-      { navn: "Vielse", info: "Sted kommer", lat: null, lng: null, farge: "#E6E1BF" },
-      { navn: "Krogerup Højskole", info: "Fest, overnatting og brunsj. Krogerupvej 13, 3050 Humlebæk", lat: 55.97352, lng: 12.53427, farge: "#D6E3EA" },
-      { navn: "Humlebæk stasjon", info: "Tog langs kysten fra København og Helsingør", lat: 55.96374, lng: 12.53341, farge: "#ECE4D9" }
+      { navn: "Vielse", info: "Gl. Strandvej 153. På stranden om været tillater det.", lat: 55.9523668, lng: 12.5338197, farge: "#C2185B", ikon: "hjerte" },
+      { navn: "Krogerup", info: "Fest, overnatting og brunsj. Krogerupvej 13, 3050 Humlebæk", lat: 55.9735247, lng: 12.5342723, farge: "#F9A825", ikon: "hus" },
+      { navn: "Humlebæk Kirke", info: "Her blir vielsen hvis vi må trekke inn.", lat: 55.9716662, lng: 12.5420613, farge: "#C2185B", ikon: "kirke" },
+      { navn: "Humlebæk Stasjon", info: "Tog langs kysten fra København og Helsingør", lat: 55.9637419, lng: 12.5334078, farge: "#795548", ikon: "tog" }
     ]
   },
 
@@ -760,10 +763,22 @@ $("#kfIcs").onclick = () => lastNedIcs([bryllupHendelse], "bryllup-sofie-sigve.i
   const mid = encodeURIComponent(C.kart.mid || "");
   $("#kart").src = `https://www.google.com/maps/d/embed?mid=${mid}&ehbc=2E312F`;
   $("#kartLenke").href = `https://www.google.com/maps/d/viewer?mid=${mid}`;
-  $("#pins").innerHTML = C.kart.steder.map(s => `
-    <li><span class="dot" style="background:${esc(s.farge)}"></span>
-    <div><span class="pin-navn">${esc(s.navn)}</span><span class="pin-info muted">${esc(s.info)}</span>
-    ${s.lat != null ? `<a class="pin-lenke" href="https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}" target="_blank" rel="noopener">Åpne i Google Maps</a>` : ""}</div></li>`).join("");
+  // Kartnål i samme stil som i Google My Maps: farget nål med hvitt symbol.
+  const NAAL = "M12 0C5.4 0 0 5.2 0 11.6 0 20.3 12 32 12 32s12-11.7 12-20.4C24 5.2 18.6 0 12 0z";
+  const SYMBOL = {
+    hjerte: "M6 11S0 7.2 0 3.6C0 1.6 1.5 0 3.3 0 4.5 0 5.5.7 6 1.7 6.5.7 7.5 0 8.7 0 10.5 0 12 1.6 12 3.6 12 7.2 6 11 6 11z",
+    hus: "M6 0 0 5h1.6v6h3.2V7.5h2.4V11h3.2V5H12z",
+    kirke: "M5.3 0h1.4v1.6h1.5V3H6.7v1.6L10 7v5H7.5V9.2h-3V12H2V7l3.3-2.4V3H3.8V1.6h1.5z",
+    tog: "M2 1.5C2 .7 2.7 0 3.5 0h5c.8 0 1.5.7 1.5 1.5V8c0 .8-.7 1.5-1.5 1.5L10 12H8.6L7.2 9.5H4.8L3.4 12H2l1.5-2.5C2.7 9.5 2 8.8 2 8zM3.5 1.8v3h5v-3zM4 6.6a.9.9 0 1 0 0 1.8.9.9 0 0 0 0-1.8zM8 6.6a.9.9 0 1 0 0 1.8.9.9 0 0 0 0-1.8z"
+  };
+  $("#pins").innerHTML = C.kart.steder.map(s => {
+    const lenke = s.lat != null ? `https://www.google.com/maps/d/viewer?mid=${mid}&ll=${s.lat},${s.lng}&z=17` : "";
+    const ikon = `<svg class="pin-ikon" viewBox="0 0 24 32" aria-hidden="true"><path fill="${esc(s.farge)}" d="${NAAL}"/>${SYMBOL[s.ikon] ? `<path fill="#fff" fill-rule="evenodd" transform="translate(6 5.5)" d="${SYMBOL[s.ikon]}"/>` : ""}</svg>`;
+    const tekst = `<span><span class="pin-navn">${esc(s.navn)}</span>${s.info ? `<span class="pin-info muted">${esc(s.info)}</span>` : ""}</span>`;
+    return lenke
+      ? `<li><a class="pin" href="${esc(lenke)}" target="_blank" rel="noopener" aria-label="${esc(s.navn)}, vis i kartet">${ikon}${tekst}</a></li>`
+      : `<li><span class="pin">${ikon}${tekst}</span></li>`;
+  }).join("");
 })();
 
 /* ============ Bildekarusell ============ */
