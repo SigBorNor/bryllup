@@ -24,6 +24,7 @@ Kontekst for den som jobber videre med siden, menneske eller Claude. Les dette f
   - Tettere tidslinje, infoknappene i rutenett, bilderekkene som sveipbare striper, Krogerup-bildet i full bredde, lavere kart med én linje per sted.
   - Karusellen viser bare bilder som ikke allerede er på siden (klassen `brukt`).
   - Topplinje (`#mobilbar`) med «Innhold» og «Svar» i stedet for de flytende knappene.
+- **Store skjermer (fra 72rem):** innholdsfortegnelsen står fast til venstre, og siden (`.side`, maks 80rem) står midt i plassen til høyre for den, med like brede marger på begge sider (minst 3rem, variabelen `--marg`).
 - **Farger og fonter:** `:root` øverst i `style.css`.
 - **Innstillinger:** `config.js` (kode, `scriptUrl`, `maksPersoner`, `paameldingApen`).
 - **Bilder:** `media/`. Videoen ligger i `media/hav.mp4` (under ca. 8 MB, spilles uten lyd). Den er bearbeidet: sakket ned til 60 % med beregnede mellombilder, beskåret 10 % på siden med lyst gjenskinn (toppen av filen, venstre side når den vises rotert på PC), og slutten toner over i starten så sløyfen ikke har noe hopp. Filen er 720 × 1152. `media/hav.jpg` er første bilde i videoen og vises mens den lastes. Byttes videoen, må begge lages på nytt.

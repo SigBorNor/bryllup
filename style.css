@@ -80,10 +80,10 @@ h4{font-weight:500;font-size:.9375rem;letter-spacing:.08em;text-transform:upperc
   .seksjon{padding:2.5rem 0}
   .seksjon + .seksjon{padding-top:1.5rem}
 }
+/* Store skjermer: siden står midt i plassen til høyre for innholdsfortegnelsen, med like brede marger på begge sider (minst 3rem) */
 @media (min-width:72rem){
-  .side{margin-left:var(--toc);margin-right:0;box-shadow:-10px 0 30px -18px rgba(60,50,52,.35)}
+  .side{--marg:max(3rem,(100% - var(--toc) - 80rem)/2);margin-left:calc(var(--toc) + var(--marg));margin-right:var(--marg);box-shadow:0 0 30px -18px rgba(60,50,52,.35)}
 }
-@media (min-width:94rem){ .side{margin-left:calc(var(--toc) + (100vw - var(--toc) - 80rem)/2)} }
 
 /* Små skjermer: knappen «Innhold» oppe til høyre åpner listen */
 .toc-knapp{position:fixed;top:calc(.75rem + env(safe-area-inset-top,0px));right:.75rem;z-index:30;display:inline-flex;align-items:center;gap:.5rem;background:var(--papir);color:var(--ink);border:1px solid var(--linje);border-radius:0;font:400 .8125rem/1 var(--f-serif);letter-spacing:.09em;text-transform:uppercase;padding:.7rem .85rem;cursor:pointer;box-shadow:0 4px 14px rgba(60,50,52,.15)}
