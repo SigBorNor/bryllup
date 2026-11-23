@@ -34,7 +34,8 @@ const INNSTILLINGER = [
   ["Pris brunsj (NOK)", 200],
   ["Betaling", "Betales med Vipps eller MobilePay til Sigve, tlf. 468 16 165."],
   ["Send oppsummering på e-post (Ja/Nei)", "Ja"],
-  ["Svar på e-posten går til (valgfritt)", ""]
+  ["Svar på e-posten går til (valgfritt)", ""],
+  ["Invitasjon: kopi til (valgfritt)", ""]
 ];
 
 // Kontaktinfo og navnetrekk i oppsummeringen på e-post
@@ -113,7 +114,8 @@ function lesInnstillinger(bok) {
     prisBrunsj: tall(v[2]),
     betaling: v[3],
     sendEpost: v[4].toLowerCase() !== "nei",
-    svarTil: /^\S+@\S+\.\S+$/.test(v[5]) ? v[5] : ""
+    svarTil: /^\S+@\S+\.\S+$/.test(v[5]) ? v[5] : "",
+    kopi: /^\S+@\S+\.\S+$/.test(v[6]) ? v[6] : ""
   };
 }
 
@@ -251,6 +253,132 @@ function oppsett() {
   o.setColumnWidth(1, 220);
   o.setColumnWidth(2, 260);
 
+  // Gjester: listen invitasjonene sendes til. Lages bare hvis den mangler, så innholdet aldri slettes.
+  if (!bok.getSheetByName("Gjester")) {
+    const g = bok.insertSheet("Gjester");
+    g.getRange(1, 1, 1, GJESTEKOLONNER.length).setValues([GJESTEKOLONNER]).setFontWeight("bold");
+    g.setFrozenRows(1);
+  }
+
   const standard = bok.getSheetByName("Ark1") || bok.getSheetByName("Sheet1");
   if (standard && bok.getSheets().length > 1) bok.deleteSheet(standard);
+}
+
+/* ================= Invitasjon på e-post =================
+ *
+ * Sendes herfra, ikke fra utkast i Gmail: Gmail sitt skrivevindu endrer lenker og
+ * bilder når et utkast åpnes, og da blir oppsettet feil.
+ *
+ * Fanen «Gjester»: én rad per invitasjon (et par eller én person).
+ *   Partner 1 | Partner 2 | Mottaker 1 | Mottaker 2 | Sendt
+ *   Partner 2 og Mottaker 2 kan stå tomme. Bare fornavnet brukes i hilsenen.
+ *   «Sendt» fylles ut av scriptet. Rader med noe i «Sendt» hoppes over.
+ *
+ * Kopi: e-postadressen i Innstillinger («Invitasjon: kopi til») settes på kopi på alle.
+ * Koden i e-posten hentes fra Innstillinger!B1, samme kode som nettsiden bruker.
+ *
+ * 1. Kjør «testInvitasjon»: sender invitasjonen for første rad i Gjester bare til deg selv.
+ * 2. Kjør «sendInvitasjoner»: sender til alle rader som ikke er sendt.
+ *    Google tillater ca. 100 mottakere per døgn (kopi teller med). Når grensen nås,
+ *    stopper scriptet. Kjør det igjen neste dag, så fortsetter det der det slapp.
+ */
+const GJESTEKOLONNER = ["Partner 1", "Partner 2", "Mottaker 1", "Mottaker 2", "Sendt"];
+const INVITASJON = {
+  emne: "Bryllupsinvitasjon – Sofie & Sigve 17.07.2027",
+  lenke: "https://www.sofieogsigve.no/",
+  svarfrist: "17. februar 2027",
+  kodeForklaring: "våre fødselsmåneder",
+  gifUrl: "https://www.sofieogsigve.no/media/invitasjon.gif"
+};
+
+function testInvitasjon() {
+  const bok = SpreadsheetApp.getActive();
+  const rader = lesGjester(bok);
+  const rad = rader[0] || { navn: ["Kari", "Ola"], til: [] };
+  const meg = Session.getEffectiveUser().getEmail();
+  sendInvitasjon(lesInnstillinger(bok), rad.navn, [meg], "", hentInvitasjonsbilder());
+  SpreadsheetApp.getActive().toast("Testinvitasjon sendt til " + meg, "Invitasjon");
+}
+
+function sendInvitasjoner() {
+  const bok = SpreadsheetApp.getActive();
+  const inn = lesInnstillinger(bok);
+  const ark = bok.getSheetByName("Gjester");
+  const rader = lesGjester(bok).filter(r => !r.sendt);
+  if (!rader.length) { bok.toast("Ingen usendte invitasjoner i Gjester.", "Invitasjon"); return; }
+  const bilder = hentInvitasjonsbilder();
+  let sendt = 0, mangler = [];
+  for (const r of rader) {
+    if (!r.til.length) { mangler.push(r.navn.join(" og ")); continue; }
+    const antall = r.til.length + (inn.kopi ? 1 : 0);
+    if (MailApp.getRemainingDailyQuota() < antall) {
+      bok.toast("Dagens grense hos Google er nådd etter " + sendt + " invitasjoner. Kjør igjen i morgen.", "Invitasjon", 15);
+      return;
+    }
+    sendInvitasjon(inn, r.navn, r.til, inn.kopi, bilder);
+    ark.getRange(r.rad, 5).setValue(new Date());
+    SpreadsheetApp.flush();
+    sendt++;
+  }
+  bok.toast(sendt + " invitasjoner sendt." + (mangler.length ? " Mangler e-post: " + mangler.join(", ") : ""), "Invitasjon", 15);
+}
+
+function lesGjester(bok) {
+  const ark = bok.getSheetByName("Gjester");
+  if (!ark || ark.getLastRow() < 2) return [];
+  const gyldig = e => /^\S+@\S+\.\S+$/.test(e);
+  return ark.getRange(2, 1, ark.getLastRow() - 1, 5).getDisplayValues().map((v, i) => ({
+    rad: i + 2,
+    navn: [v[0], v[1]].map(n => String(n).trim().split(/\s+/)[0]).filter(Boolean),
+    til: [v[2], v[3]].map(e => String(e).trim()).filter(gyldig),
+    sendt: String(v[4]).trim() !== ""
+  })).filter(r => r.navn.length);
+}
+
+function hentInvitasjonsbilder() {
+  return {
+    invitasjon: UrlFetchApp.fetch(INVITASJON.gifUrl).getBlob().setName("invitasjon.gif"),
+    navnetrekk: UrlFetchApp.fetch(NAVNETREKK_URL).getBlob().setName("sofie-og-sigve.png")
+  };
+}
+
+function sendInvitasjon(inn, navn, til, kopi, bilder) {
+  const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const dere = navn.length > 1 ? "dere" : "deg";
+  const dereKan = navn.length > 1 ? "dere" : "du";
+  const hilsen = "Kjære " + navn.join(" og ") + "!";
+  const tekst1 = "I sommer skal vi gifte oss og vi har gledet oss til å sende " + dere + " denne invitasjonen!";
+  const kode = "Kode til invitasjonen: ";
+  const kodeSlutt = " (" + INVITASJON.kodeForklaring + ").";
+  const frist = "Svar på invitasjonen ønskes innen ";
+  const tekst2 = "Vi håper " + dereKan + " kan komme!";
+
+  const html =
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ECE4D9" style="background-color:#ECE4D9;border-collapse:collapse"><tr><td align="center" bgcolor="#ECE4D9" style="background-color:#ECE4D9;padding:40px 20px 48px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;border-collapse:collapse"><tr><td align="center" style="font-family:Georgia,\'Times New Roman\',serif;color:#5E4F51;font-size:18px;line-height:1.6;text-align:center">' +
+    '<img src="cid:invitasjon" alt="Bryllupsinvitasjon – Sofie og Sigve 17.07.2027" width="520" style="display:block;width:100%;max-width:520px;height:auto;margin:0 auto 32px;border:0">' +
+    '<p style="margin:0 0 6px">' + esc(hilsen) + '</p>' +
+    '<p style="margin:0 0 28px">' + esc(tekst1) + '</p>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 18px;border-collapse:collapse"><tr><td bgcolor="#D6E3EA" style="background-color:#D6E3EA;border:1px solid #6E5C5E">' +
+    '<a href="' + INVITASJON.lenke + '" style="display:inline-block;padding:14px 30px;font-family:Georgia,\'Times New Roman\',serif;font-size:18px;color:#5E4F51;text-decoration:none">Åpne invitasjonen</a></td></tr></table>' +
+    '<p style="margin:0;font-size:16px;color:#8C7E7F">' + esc(kode) + '<b>' + esc(inn.kode) + '</b>' + esc(kodeSlutt) + '</p>' +
+    '<p style="margin:0 0 36px;font-size:16px;color:#8C7E7F">' + esc(frist) + '<b>' + esc(INVITASJON.svarfrist) + '</b>.</p>' +
+    '<p style="margin:0 0 14px">' + esc(tekst2) + '</p>' +
+    '<img src="cid:navnetrekk" alt="Sofie ♡ Sigve" width="259" height="57" style="display:block;width:259px;height:auto;margin:0 auto;border:0">' +
+    '</td></tr></table></td></tr></table>';
+
+  const ren = [hilsen, "", tekst1, "", "Åpne invitasjonen: " + INVITASJON.lenke, "",
+    kode + inn.kode + kodeSlutt, frist + INVITASJON.svarfrist + ".", "", tekst2, "", "Sofie ♡ Sigve"].join("\n");
+
+  const melding = {
+    to: til.join(","),
+    subject: INVITASJON.emne,
+    body: ren,
+    htmlBody: html,
+    inlineImages: bilder,
+    name: "Sofie & Sigve"
+  };
+  if (kopi) melding.cc = kopi;
+  if (inn.svarTil) melding.replyTo = inn.svarTil;
+  MailApp.sendEmail(melding);
 }
