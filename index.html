@@ -124,7 +124,7 @@ const C = {
   },
 
   // Vises etter prisene og i oppsummeringen etter påmelding
-  betaling: "Betales med Vipps eller MobilePay til Sigve, tlf. 468 16 165.",
+  betaling: "Betales med Vipps eller MobilePay til Sigve, tlf. +47 468 16 165.",
 
   // Infotekster. Hver av dem vises flere steder (under tidslinjen, i «Praktisk info» og i påmeldingen),
   // så teksten endres bare her. pris er i NOK og brukes til å regne ut summen etter påmelding.
@@ -386,7 +386,7 @@ const C = {
 
     <figure class="seksjon trio" aria-label="Flere bilder av Sofie og Sigve">
       <img src="media/vinter-akebrett.jpg" alt="Sofie og Sigve på slede i snøen" width="1400" height="1600" loading="lazy">
-      <img src="media/surf-paa-vei-ut.jpg" alt="Sofie og Sigve bærer surfebrett over hodet på stranden" width="768" height="1024" loading="lazy">
+      <img src="media/jul-lystre.jpg" alt="Sofie og Sigve under et tre pyntet med lys" width="724" height="1086" loading="lazy">
       <img src="media/fest-dress-og-kjole.jpg" alt="Sofie og Sigve i kjole og dress på fest" width="724" height="1086" loading="lazy">
     </figure>
 
@@ -794,8 +794,13 @@ $("#kfIcs").onclick = () => lastNedIcs([bryllupHendelse], "bryllup-sofie-sigve.i
 (function () {
   const ul = $("#karusell");
   // Bilder som allerede vises andre steder på siden. På mobil viser karusellen bare de andre.
-  const brukt = new Set([...document.querySelectorAll("main img:not(.kun-pc img)")].map(i => i.getAttribute("src").replace("media/", "")));
-  ul.innerHTML = C.bilder.map(b => `
+  const fil = i => i.getAttribute("src").replace("media/", "");
+  const brukt = new Set([...document.querySelectorAll("main img:not(.kun-pc img)")].map(fil));
+  // Bilder som er vist på siden fra før, kommer sist i karusellen (på PC regnes også bilder som bare vises der)
+  const pc = !matchMedia("(max-width:47.99rem)").matches;
+  const vist = new Set([...brukt, ...(pc ? [...document.querySelectorAll("main .kun-pc img")].map(fil) : [])]);
+  const rekke = [...C.bilder.filter(b => !vist.has(b.fil)), ...C.bilder.filter(b => vist.has(b.fil))];
+  ul.innerHTML = rekke.map(b => `
     <li${brukt.has(b.fil) ? ' class="brukt"' : ""}><img src="media/${esc(b.fil)}" alt="${esc(b.alt)}" width="${b.b}" height="${b.h}" style="aspect-ratio:${b.b}/${b.h}" loading="lazy"></li>`).join("");
   const bla = retning => ul.scrollBy({ left: retning * ul.clientWidth * 0.8, behavior: redusert ? "auto" : "smooth" });
   $("#karForrige").onclick = () => bla(-1);

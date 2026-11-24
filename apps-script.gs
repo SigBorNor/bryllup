@@ -32,14 +32,16 @@ const INNSTILLINGER = [
   ["Kode", "123"],
   ["Pris overnatting (NOK)", 800],
   ["Pris brunsj (NOK)", 200],
-  ["Betaling", "Betales med Vipps eller MobilePay til Sigve, tlf. 468 16 165."],
+  ["Betaling", "Betales med Vipps eller MobilePay til Sigve, tlf. +47 468 16 165."],
   ["Send oppsummering på e-post (Ja/Nei)", "Ja"],
   ["Svar på e-posten går til (valgfritt)", ""],
   ["Invitasjon: kopi til (valgfritt)", ""]
 ];
 
 // Kontaktinfo og navnetrekk i oppsummeringen på e-post
-const KONTAKT = { sigve: "468 16 165", sofie: "477 08 445" };
+const KONTAKT = { sigve: "+47 468 16 165", sofie: "+47 477 08 445" };
+// Betaling i oppsummeringen: «Vi setter pris på om du betaler … til … innen …»
+const BETALING = { til: "Sigve med Vipps eller MobilePay på +47 468 16 165", frist: "17. februar 2027" };
 const NAVNETREKK_URL = "https://www.sofieogsigve.no/media/navnetrekk-epost.png";
 
 function doPost(e) {
@@ -129,12 +131,12 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
   const tekstLinjer = ["Hei " + navneliste + "!", ""];
   if (!kommer) {
     tekstLinjer.push("Tusen takk for at " + du + " svarte på invitasjonen til bryllupet vårt. Vi har registrert at " + du + " dessverre ikke kan komme:", "");
-    linjer.forEach(l => tekstLinjer.push("– " + l.navn));
+    linjer.forEach(l => tekstLinjer.push("• " + l.navn));
     tekstLinjer.push("", (du === "du" ? "Du" : "Dere") + " blir savnet!");
   } else {
     tekstLinjer.push("Tusen takk for at " + du + " svarte på invitasjonen til bryllupet vårt. Dette er det vi har registrert:", "");
     linjer.forEach(l => {
-      tekstLinjer.push("– " + l.navn + ": " + [
+      tekstLinjer.push("• " + l.navn + ": " + [
         l.overnatting === "Ja" ? "overnatter på Krogerup lør–søn" : "overnatter ikke på Krogerup",
         l.brunsj === "Ja" ? "brunsj søndag" : "ikke brunsj",
         "sammenkomst fredag: " + l.fredag.toLowerCase()
@@ -147,8 +149,8 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
       const deler = [];
       if (nOv) deler.push(nOv + " × overnatting à " + inn.prisOvernatting + " NOK");
       if (nBr) deler.push(nBr + " × brunsj à " + inn.prisBrunsj + " NOK");
-      tekstLinjer.push("", "Å betale: " + sum + " NOK (" + deler.join(", ") + ").");
-      if (inn.betaling) tekstLinjer.push(inn.betaling);
+      const kr = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      tekstLinjer.push("", "Vi setter pris på om " + du + " betaler " + kr(sum) + " NOK (" + deler.join(", ") + ") til " + BETALING.til + " innen " + BETALING.frist + ".");
     }
     tekstLinjer.push("", "Vi gleder oss til å feire med " + (du === "du" ? "deg" : "dere") + "!");
   }
@@ -163,7 +165,14 @@ function sendOppsummering(inn, navn, epost, kommer, linjer) {
   // HTML-versjon med navnetrekket nederst (bildet ligger på nettsiden). Ren tekst er reserve for e-postprogrammer uten HTML.
   const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const html = '<div style="font-family:Georgia,serif;font-size:16px;line-height:1.6;color:#5E4F51;max-width:560px">' +
-    tekstLinjer.map(l => l === "" ? "<br>" : esc(l).replace("sofieogsigve.no", '<a href="https://www.sofieogsigve.no" style="color:#5E4F51">sofieogsigve.no</a>') + "<br>").join("") +
+    tekstLinjer.map((l, i) => {
+      if (l.startsWith("• ")) {   // kulepunkter samles i én liste
+        const forste = !tekstLinjer[i - 1] || !tekstLinjer[i - 1].startsWith("• ");
+        const siste = !tekstLinjer[i + 1] || !tekstLinjer[i + 1].startsWith("• ");
+        return (forste ? '<ul style="margin:0;padding-left:22px">' : "") + "<li>" + esc(l.slice(2)) + "</li>" + (siste ? "</ul>" : "");
+      }
+      return l === "" ? "<br>" : esc(l).replace("sofieogsigve.no", '<a href="https://www.sofieogsigve.no" style="color:#5E4F51">sofieogsigve.no</a>') + "<br>";
+    }).join("") +
     '<br><img src="' + NAVNETREKK_URL + '" alt="Sofie ♡ Sigve" width="220" style="display:block;width:220px;height:auto;margin-top:8px"></div>';
 
   const melding = {
