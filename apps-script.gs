@@ -216,6 +216,8 @@ function oppsett() {
     const celle = inn.getRange(i + 1, 2);
     if (celle.getDisplayValue() === "" && standard !== "") celle.setValue(standard);
   });
+  // Koden lagres som tekst, ellers fjerner regnearket nuller foran (0501 blir 501)
+  inn.getRange("B1").setNumberFormat("@");
   inn.setColumnWidth(1, 300);
   inn.setColumnWidth(2, 420);
 
